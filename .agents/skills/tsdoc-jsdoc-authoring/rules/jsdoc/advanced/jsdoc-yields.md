@@ -30,5 +30,7 @@ function* fibonacci() {
  * Generates Fibonacci numbers.
  * @yields {number} The next number in the sequence.
  */
-function* fibonacci() {}
+function* fibonacci() {
+	yield 0;
+}
 ```
