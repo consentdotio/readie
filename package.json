@@ -46,6 +46,7 @@
 		"fix": "ultracite fix",
 		"prepare": "lefthook install",
 		"test": "bunx vitest run",
+		"test:coverage": "bunx vitest run --coverage",
 		"test:watch": "bunx vitest",
 		"typecheck": "bunx tsc -p tsconfig.json --noEmit"
 	},
@@ -62,6 +63,7 @@
 		"@changesets/cli": "^2.29.8",
 		"@types/fs-extra": "^11.0.4",
 		"@types/node": "^25.3.0",
+		"@vitest/coverage-v8": "^4.0.18",
 		"changeset-conventional-commits": "^0.2.5",
 		"fs-extra": "^11.3.3",
 		"lefthook": "^2.1.1",
