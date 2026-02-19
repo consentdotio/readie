@@ -149,7 +149,9 @@
       "features": ["Fast", "Typed", "Zero-config"],
       "installation": ["```bash\\nnpm i my-library\\n```"],
       "usage": ["Import and use the library in your project."],
-      "commands": [{ "name": "my-cli init", "description": "Initialize project files." }]
+      "commands": [
+        { "name": "my-cli init", "description": "Initialize project files." }
+      ]
     }
   ]
 }

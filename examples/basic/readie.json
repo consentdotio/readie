@@ -11,19 +11,11 @@
       "link": "https://www.npmjs.com/package/acme-toolkit"
     }
   ],
-  "features": [
-    "Typed APIs",
-    "Fast local setup",
-    "Works in Node.js and Bun"
-  ],
-  "installation": [
-    "```bash\nnpm install acme-toolkit\n```"
-  ],
+  "features": ["Typed APIs", "Fast local setup", "Works in Node.js and Bun"],
+  "installation": ["```bash\nnpm install acme-toolkit\n```"],
   "usage": [
     "Import the toolkit and initialize your client.",
     "```ts\nimport { createClient } from 'acme-toolkit'\n\nconst client = createClient()\n```"
   ],
-  "support": [
-    "Open an issue in your repository tracker."
-  ]
+  "support": ["Open an issue in your repository tracker."]
 }

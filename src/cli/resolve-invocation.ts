@@ -1,4 +1,9 @@
-export type InvocationMode = 'generate' | 'generate:workspace' | 'init' | 'help' | 'unknown';
+export type InvocationMode =
+  | "generate"
+  | "generate:workspace"
+  | "init"
+  | "help"
+  | "unknown";
 
 export interface ResolvedInvocation {
   mode: InvocationMode;
@@ -6,62 +11,63 @@ export interface ResolvedInvocation {
   originalArgs: string[];
 }
 
-const isHelpFlag = (value: string | undefined) => value === '--help' || value === '-h';
+const isHelpFlag = (value: string | undefined) =>
+  value === "--help" || value === "-h";
 
 export const resolveInvocation = (args: string[]): ResolvedInvocation => {
   const [first, ...rest] = args;
 
   if (!first) {
     return {
-      mode: 'generate',
       commandArgs: [],
+      mode: "generate",
       originalArgs: args,
     };
   }
 
   if (isHelpFlag(first)) {
     return {
-      mode: 'help',
       commandArgs: rest,
+      mode: "help",
       originalArgs: args,
     };
   }
 
-  if (first === 'generate') {
+  if (first === "generate") {
     return {
-      mode: 'generate',
       commandArgs: rest,
+      mode: "generate",
       originalArgs: args,
     };
   }
 
-  if (first === 'generate:workspace') {
+  if (first === "generate:workspace") {
     return {
-      mode: 'generate:workspace',
       commandArgs: rest,
+      mode: "generate:workspace",
       originalArgs: args,
     };
   }
 
-  if (first === 'init') {
+  if (first === "init") {
     return {
-      mode: 'init',
       commandArgs: rest,
+      mode: "init",
       originalArgs: args,
     };
   }
 
-  if (first === 'help') {
+  if (first === "help") {
     return {
-      mode: 'help',
       commandArgs: rest,
+      mode: "help",
       originalArgs: args,
     };
   }
 
   return {
-    mode: 'unknown',
     commandArgs: args,
+    mode: "unknown",
     originalArgs: args,
   };
 };

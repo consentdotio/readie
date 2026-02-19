@@ -1,6 +1,19 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "extends": [
-    "./node_modules/ultracite/config/oxlint/core/.oxlintrc.json"
-  ]
+  "extends": ["./node_modules/ultracite/config/oxlint/core/.oxlintrc.json"],
+  "rules": {
+    "complexity": "off",
+    "func-style": "off",
+    "import/no-nodejs-modules": "off",
+    "import/no-relative-parent-imports": "off",
+    "jest/max-expects": "off",
+    "jest/require-hook": "off",
+    "jest/valid-title": "off",
+    "max-statements": "off",
+    "no-nested-ternary": "off",
+    "no-shadow": "off",
+    "no-useless-return": "off",
+    "promise/prefer-await-to-callbacks": "off",
+    "unicorn/no-useless-fallback-in-spread": "off"
+  }
 }

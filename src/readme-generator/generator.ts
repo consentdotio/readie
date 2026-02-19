@@ -1,19 +1,24 @@
-import * as fssync from 'node:fs';
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { loadGlobalConfig, loadReadieConfig, mergeConfigs } from '../config/load-config.js';
+import * as fssync from "node:fs";
+import fs from "node:fs/promises";
+import path from "node:path";
+
+import {
+  loadGlobalConfig,
+  loadReadieConfig,
+  mergeConfigs,
+} from "../config/load-config.js";
 import type {
   GenerateSingleOptions,
   GenerateSingleResult,
   GenerateWorkspaceOptions,
   GenerateWorkspaceResult,
-} from '../config/types.js';
-import { baseReadmeTemplate } from './template.js';
+} from "../config/types.js";
+import { baseReadmeTemplate } from "./template.js";
 
 export const parsePackageList = (values: string[]): Set<string> => {
   const packages = new Set<string>();
   for (const value of values) {
-    for (const part of value.split(',')) {
+    for (const part of value.split(",")) {
       const name = part.trim();
       if (name.length > 0) {
         packages.add(name);
@@ -26,7 +31,7 @@ export const parsePackageList = (values: string[]): Set<string> => {
 const resolveOutputPath = (
   configPath: string,
   configOutputPath: string | undefined,
-  cliOutputPath: string | undefined,
+  cliOutputPath: string | undefined
 ) => {
   if (cliOutputPath) {
     return path.resolve(cliOutputPath);
@@ -34,16 +39,20 @@ const resolveOutputPath = (
   if (configOutputPath) {
     return path.resolve(path.dirname(configPath), configOutputPath);
   }
-  return path.resolve(path.dirname(configPath), 'README.md');
+  return path.resolve(path.dirname(configPath), "README.md");
 };
 
-const resolvePackageName = async (configPath: string): Promise<string | undefined> => {
-  const packageJsonPath = path.join(path.dirname(configPath), 'package.json');
+const resolvePackageName = async (
+  configPath: string
+): Promise<string | undefined> => {
+  const packageJsonPath = path.join(path.dirname(configPath), "package.json");
 
   try {
-    const rawPackageJson = await fs.readFile(packageJsonPath, 'utf8');
+    const rawPackageJson = await fs.readFile(packageJsonPath, "utf8");
     const parsed = JSON.parse(rawPackageJson) as { name?: unknown };
-    return typeof parsed.name === 'string' && parsed.name.trim().length > 0 ? parsed.name : undefined;
+    return typeof parsed.name === "string" && parsed.name.trim().length > 0
+      ? parsed.name
+      : undefined;
   } catch (error) {
     console.warn(`Package.json not found at ${packageJsonPath}:`, error);
     return undefined;
@@ -58,14 +67,20 @@ export const generateReadmeFromConfig = async ({
 }: GenerateSingleOptions): Promise<GenerateSingleResult> => {
   const absoluteConfigPath = path.resolve(configPath);
   const projectConfig = await loadReadieConfig(absoluteConfigPath);
-  const globalConfig = useGlobalConfig ? await loadGlobalConfig(path.dirname(absoluteConfigPath)) : null;
+  const globalConfig = useGlobalConfig
+    ? await loadGlobalConfig(path.dirname(absoluteConfigPath))
+    : null;
   const packageName = await resolvePackageName(absoluteConfigPath);
   const config = mergeConfigs(globalConfig, projectConfig, { packageName });
-  const resolvedOutputPath = resolveOutputPath(absoluteConfigPath, config.output, outputPath);
+  const resolvedOutputPath = resolveOutputPath(
+    absoluteConfigPath,
+    config.output,
+    outputPath
+  );
 
   const content = baseReadmeTemplate(config);
   const existingContent = fssync.existsSync(resolvedOutputPath)
-    ? await fs.readFile(resolvedOutputPath, 'utf8')
+    ? await fs.readFile(resolvedOutputPath, "utf8")
     : null;
 
   if (existingContent === content) {
@@ -76,7 +91,7 @@ export const generateReadmeFromConfig = async ({
   }
 
   if (!dryRun) {
-    await fs.writeFile(resolvedOutputPath, content, 'utf8');
+    await fs.writeFile(resolvedOutputPath, content, "utf8");
   }
 
   return {
@@ -116,10 +131,10 @@ export async function generateWorkspaceReadmes({
       : [];
 
   const result: GenerateWorkspaceResult = {
-    updated: [],
-    unchanged: [],
     failed: [],
     skippedByFilter,
+    unchanged: [],
+    updated: [],
   };
 
   for (const projectDir of selectedProjectDirs) {
@@ -133,13 +148,15 @@ export async function generateWorkspaceReadmes({
       });
       if (singleResult.updated) {
         result.updated.push(projectName);
-        console.log(`${dryRun ? 'Would update' : 'Generated'} README for ${projectName}`);
+        console.log(
+          `${dryRun ? "Would update" : "Generated"} README for ${projectName}`
+        );
       } else {
         result.unchanged.push(projectName);
         console.log(`No changes for ${projectName}`);
       }
     } catch (error) {
-      result.failed.push({ projectDir: projectName, error });
+      result.failed.push({ error, projectDir: projectName });
       console.error(`Error generating README for ${projectName}:`, error);
     }
   }

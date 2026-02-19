@@ -2,8 +2,23 @@
   "name": "readie",
   "version": "0.0.1",
   "description": "Generate high-quality README files from a validated JSON config.",
-  "type": "module",
-  "main": "dist/index.js",
+  "keywords": [
+    "cli",
+    "documentation",
+    "generator",
+    "markdown",
+    "readme"
+  ],
+  "homepage": "https://github.com/consentdotio/readie",
+  "bugs": {
+    "url": "https://github.com/consentdotio/readie/issues"
+  },
+  "license": "MIT",
+  "author": "Christopher Burns",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/consentdotio/readie.git"
+  },
   "bin": {
     "readie": "dist/index.js"
   },
@@ -17,6 +32,8 @@
     "CODE_OF_CONDUCT.md",
     "SECURITY.md"
   ],
+  "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target node --minify",
     "clean": "bun --eval \"import { rmSync } from 'node:fs'; rmSync('dist', { recursive: true, force: true });\"",
@@ -28,23 +45,6 @@
     "changeset": "changeset",
     "check": "ultracite check",
     "fix": "ultracite fix"
-  },
-  "keywords": [
-    "readme",
-    "documentation",
-    "cli",
-    "generator",
-    "markdown"
-  ],
-  "author": "Christopher Burns",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/consentdotio/readie.git"
-  },
-  "homepage": "https://github.com/consentdotio/readie",
-  "bugs": {
-    "url": "https://github.com/consentdotio/readie/issues"
   },
   "dependencies": {
     "@effect/cli": "^0.73.2",

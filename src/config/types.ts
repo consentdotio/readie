@@ -23,7 +23,7 @@ export type ReadieLicense = string | ReadieLicenseObject;
 
 export interface ReadieConfig {
   $schema?: string;
-  version?: '1';
+  version?: "1";
   title: string;
   description: string;
   output?: string;
@@ -73,6 +73,6 @@ export interface GenerateWorkspaceOptions {
 export interface GenerateWorkspaceResult {
   updated: string[];
   unchanged: string[];
-  failed: Array<{ projectDir: string; error: unknown }>;
+  failed: { projectDir: string; error: unknown }[];
   skippedByFilter: string[];
 }
