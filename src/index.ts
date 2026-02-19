@@ -1,69 +1,78 @@
 #!/usr/bin/env node
 
-import { Command, ValidationError } from '@effect/cli';
-import * as NodeContext from '@effect/platform-node/NodeContext';
-import * as NodeRuntime from '@effect/platform-node/NodeRuntime';
-import { Effect } from 'effect';
-import { generateCommand } from './cli/commands/generate.js';
-import { generateWorkspaceCommand } from './cli/commands/generate-workspace.js';
-import { initCommand } from './cli/commands/init.js';
-import { printRootHelp } from './cli/help.js';
-import { resolveInvocation } from './cli/resolve-invocation.js';
+import { Command, ValidationError } from "@effect/cli";
+import * as NodeContext from "@effect/platform-node/NodeContext";
+import { Effect } from "effect";
 
-const version = '0.1.0';
+import { generateCommand } from "./cli/commands/generate";
+import { generateWorkspaceCommand } from "./cli/commands/generate-workspace";
+import { initCommand } from "./cli/commands/init";
+import { printRootHelp } from "./cli/help";
+import { resolveInvocation } from "./cli/resolve-invocation";
+
+const version = "0.0.1";
 
 const runGenerate = (args: string[]) =>
-  Command.run(generateCommand, {
-    name: 'readie',
-    version,
-  })(args).pipe(Effect.provide(NodeContext.layer));
+	Command.run(generateCommand, {
+		name: "readie",
+		version,
+	})(args).pipe(Effect.provide(NodeContext.layer));
 
 const runGenerateWorkspace = (args: string[]) =>
-  Command.run(generateWorkspaceCommand, {
-    name: 'readie',
-    version,
-  })(args).pipe(Effect.provide(NodeContext.layer));
+	Command.run(generateWorkspaceCommand, {
+		name: "readie",
+		version,
+	})(args).pipe(Effect.provide(NodeContext.layer));
 
 const runInit = (args: string[]) =>
-  Command.run(initCommand, {
-    name: 'readie',
-    version,
-  })(args).pipe(Effect.provide(NodeContext.layer));
+	Command.run(initCommand, {
+		name: "readie",
+		version,
+	})(args).pipe(Effect.provide(NodeContext.layer));
 
-const resolved = resolveInvocation(process.argv.slice(2));
+const selectCommandEffect = (
+	resolved: ReturnType<typeof resolveInvocation>
+) => {
+	if (resolved.mode === "generate") {
+		return runGenerate(resolved.commandArgs);
+	}
+	if (resolved.mode === "generate:workspace") {
+		return runGenerateWorkspace(resolved.commandArgs);
+	}
+	if (resolved.mode === "init") {
+		return runInit(resolved.commandArgs);
+	}
+	throw new Error(`Unsupported invocation mode: ${resolved.mode}`);
+};
 
-if (resolved.mode === 'help') {
-  printRootHelp();
-  process.exit(0);
-}
+const handleError = (error: unknown) => {
+	if (ValidationError.isValidationError(error)) {
+		console.error(String(error));
+		process.exitCode = 1;
+		return;
+	}
 
-if (resolved.mode === 'unknown') {
-  printRootHelp();
-  process.exit(1);
-}
+	console.error(error instanceof Error ? error.message : String(error));
+	process.exitCode = 1;
+};
 
-const commandEffect =
-  resolved.mode === 'generate'
-    ? runGenerate(resolved.commandArgs)
-    : resolved.mode === 'generate:workspace'
-      ? runGenerateWorkspace(resolved.commandArgs)
-      : runInit(resolved.commandArgs);
+const main = async () => {
+	const resolved = resolveInvocation(process.argv.slice(2));
 
-const program = commandEffect.pipe(
-  Effect.catchIf(
-    (error): error is ValidationError.ValidationError => ValidationError.isValidationError(error),
-    (error) =>
-      Effect.sync(() => {
-        console.error(String(error));
-        process.exitCode = 1;
-      }),
-  ),
-  Effect.catchAll((error) =>
-    Effect.sync(() => {
-      console.error(error instanceof Error ? error.message : String(error));
-      process.exitCode = 1;
-    }),
-  ),
-);
+	if (resolved.mode === "help") {
+		printRootHelp();
+		process.exit(0);
+	}
+	if (resolved.mode === "unknown") {
+		printRootHelp();
+		process.exit(1);
+	}
 
-NodeRuntime.runMain(program);
+	try {
+		await Effect.runPromise(selectCommandEffect(resolved));
+	} catch (error) {
+		handleError(error);
+	}
+};
+
+await main();

@@ -1,67 +1,43 @@
-export type InvocationMode = 'generate' | 'generate:workspace' | 'init' | 'help' | 'unknown';
+export type InvocationMode =
+	| "generate"
+	| "generate:workspace"
+	| "init"
+	| "help"
+	| "unknown";
 
 export interface ResolvedInvocation {
-  mode: InvocationMode;
-  commandArgs: string[];
-  originalArgs: string[];
+	mode: InvocationMode;
+	commandArgs: string[];
+	originalArgs: string[];
 }
 
-const isHelpFlag = (value: string | undefined) => value === '--help' || value === '-h';
+const isHelpFlag = (value: string | undefined) =>
+	value === "--help" || value === "-h";
+
+const modeFromToken = (token: string | undefined): InvocationMode => {
+	if (!token) {
+		return "generate";
+	}
+	if (isHelpFlag(token) || token === "help") {
+		return "help";
+	}
+
+	const commandModes: Record<string, InvocationMode> = {
+		generate: "generate",
+		"generate:workspace": "generate:workspace",
+		init: "init",
+	};
+
+	return commandModes[token] ?? "unknown";
+};
 
 export const resolveInvocation = (args: string[]): ResolvedInvocation => {
-  const [first, ...rest] = args;
+	const [first, ...rest] = args;
+	const mode = modeFromToken(first);
 
-  if (!first) {
-    return {
-      mode: 'generate',
-      commandArgs: [],
-      originalArgs: args,
-    };
-  }
-
-  if (isHelpFlag(first)) {
-    return {
-      mode: 'help',
-      commandArgs: rest,
-      originalArgs: args,
-    };
-  }
-
-  if (first === 'generate') {
-    return {
-      mode: 'generate',
-      commandArgs: rest,
-      originalArgs: args,
-    };
-  }
-
-  if (first === 'generate:workspace') {
-    return {
-      mode: 'generate:workspace',
-      commandArgs: rest,
-      originalArgs: args,
-    };
-  }
-
-  if (first === 'init') {
-    return {
-      mode: 'init',
-      commandArgs: rest,
-      originalArgs: args,
-    };
-  }
-
-  if (first === 'help') {
-    return {
-      mode: 'help',
-      commandArgs: rest,
-      originalArgs: args,
-    };
-  }
-
-  return {
-    mode: 'unknown',
-    commandArgs: args,
-    originalArgs: args,
-  };
+	return {
+		commandArgs: mode === "unknown" ? args : rest,
+		mode,
+		originalArgs: args,
+	};
 };

@@ -28,9 +28,9 @@ npm install acme-toolkit
 1. Import the toolkit and initialize your client.
 
 ```ts
-import { createClient } from 'acme-toolkit'
+import { createClient } from "acme-toolkit";
 
-const client = createClient()
+const client = createClient();
 ```
 
 ## Support

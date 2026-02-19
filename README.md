@@ -67,8 +67,8 @@ You can also run it without global install via `npx readie`.
 
 ```json
 {
-  "banner": "<h1 align=\"center\">{{title}}</h1>",
-  "footer": "https://example.com?ref={{packageNameEncoded}}"
+	"banner": "<h1 align=\"center\">{{title}}</h1>",
+	"footer": "https://example.com?ref={{packageNameEncoded}}"
 }
 ```
 
