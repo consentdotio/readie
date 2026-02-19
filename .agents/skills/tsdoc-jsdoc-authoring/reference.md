@@ -190,5 +190,5 @@ Use this quick pass before finalizing JSDoc blocks in any project:
 
 ## 9) Sources Used For This Skill
 
-- TSDoc: `/microsoft/tsdoc` (Context7)
-- JSDoc: `/jsdoc/jsdoc.github.io` (Context7)
+- TSDoc: `/microsoft/tsdoc` (Context7 internal context identifier for source mapping)
+- JSDoc: `/jsdoc/jsdoc.github.io` (Context7 internal context identifier for source mapping)

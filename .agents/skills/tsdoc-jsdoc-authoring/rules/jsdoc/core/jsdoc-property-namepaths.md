@@ -11,7 +11,7 @@ When a parameter is an object, document its fields using namepaths.
 Each object property needs its own comment that explains what it does.
 
 **Use this when:** function expects structured objects or arrays of objects.  
-**Avoid this when:** only top-level object parameter is documented.
+**Avoid this when:** you are only documenting a single top-level object parameter and none of its nested properties need separate documentation.
 
 **Incorrect (missing nested fields):**
 

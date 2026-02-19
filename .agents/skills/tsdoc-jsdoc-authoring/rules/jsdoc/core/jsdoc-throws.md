@@ -12,7 +12,7 @@ Use `@throws {Type} ...` for expected, caller-relevant failures.
 **Use this when:** function may throw known errors callers should handle.  
 **Avoid this when:** listing incidental internal errors with no contract value.
 
-**Incorrect (no throws contract):**
+**Incorrect (no-throws-contract):**
 
 ```js
 /**

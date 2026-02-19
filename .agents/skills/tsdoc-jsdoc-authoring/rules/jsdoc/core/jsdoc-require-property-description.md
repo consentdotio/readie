@@ -10,7 +10,7 @@ tags: jsdoc, property, descriptions, lint
 Ensure all `@property` tags include a description.
 
 **Use this when:** documenting typedef or namespace properties.  
-**Avoid this when:** leaving property tags without explanatory text.
+**Avoid this when:** the property tag already includes an explanatory description.
 
 Property descriptions should be documented so consumers understand each field's purpose.
 

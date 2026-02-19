@@ -32,6 +32,15 @@ function quux(foo) {}
 function quux(foo) {}
 ```
 
+**Correct (optional param without default value):**
+
+```js
+/**
+ * @param {number} [foo]
+ */
+function quux(foo) {}
+```
+
 **Correct (untyped required param notation):**
 
 ```js

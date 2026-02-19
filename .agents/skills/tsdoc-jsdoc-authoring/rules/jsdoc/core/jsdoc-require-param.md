@@ -10,7 +10,7 @@ tags: jsdoc, param, completeness, lint
 Document all function parameters with JSDoc `@param` tags.
 
 **Use this when:** writing JSDoc for functions, methods, and callable APIs.  
-**Avoid this when:** some parameters are undocumented in the JSDoc block.
+**Avoid this when:** TypeScript types already provide complete parameter documentation.
 
 This improves code quality and maintainability by making function inputs explicit.
 

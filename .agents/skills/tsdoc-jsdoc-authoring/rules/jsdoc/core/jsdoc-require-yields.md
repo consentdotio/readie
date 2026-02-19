@@ -36,7 +36,7 @@ function* quux(foo) {}
 
 ```js
 /**
- * @yields Foo
+ * @yields {Foo}
  */
 function* quux(foo) {
 	yield foo;

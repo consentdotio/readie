@@ -10,7 +10,7 @@ tags: jsdoc, param, types, contracts
 Use `@param {Type} name - Description` for each parameter.
 
 **Use this when:** documenting JavaScript API parameters.  
-**Avoid this when:** type expressions are missing or inconsistent.
+**Avoid this when:** using TypeScript with explicit parameter types or when types are reliably inferred from existing annotations/tooling.
 
 Each parameter comment must explain what that specific parameter does.
 

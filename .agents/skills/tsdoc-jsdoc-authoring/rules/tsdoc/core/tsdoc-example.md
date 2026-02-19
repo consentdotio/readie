@@ -9,8 +9,8 @@ tags: tsdoc, example, usage, snippets
 
 Use `@example` for tricky, non-obvious, or high-value usage patterns.
 
-**Use this when:** behavior is subtle or edge-case driven.  
-**Avoid this when:** examples are trivial, stale, or excessively long.
+**When to use:** behavior is subtle or edge-case driven.  
+**When to avoid:** examples are trivial, stale, or excessively long.
 
 **Incorrect (no usage guidance for tricky API):**
 

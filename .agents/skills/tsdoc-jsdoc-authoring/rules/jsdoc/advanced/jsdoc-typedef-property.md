@@ -10,7 +10,7 @@ tags: jsdoc, typedef, property, object-shapes
 Use `@typedef` and `@property` for repeated object shapes.
 
 **Use this when:** multiple APIs share the same object structure.  
-**Avoid this when:** duplicating long inline object type expressions everywhere.
+**Avoid inline shapes when:** the same structure appears in multiple places.
 
 **Incorrect (duplicated inline shape):**
 

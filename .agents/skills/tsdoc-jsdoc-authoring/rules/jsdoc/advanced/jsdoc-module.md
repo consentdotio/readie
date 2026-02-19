@@ -9,7 +9,7 @@ tags: jsdoc, module, entrypoint, organization
 
 Use `@module` at file/module scope for package organization and generated docs.
 
-**Use this when:** documenting JavaScript module entrypoints or grouped exports.  
+**Apply it when:** documenting JavaScript module entrypoints or grouped exports.  
 **Avoid this when:** annotating individual functions with module-level semantics.
 
 **Incorrect (module tag on member doc):**

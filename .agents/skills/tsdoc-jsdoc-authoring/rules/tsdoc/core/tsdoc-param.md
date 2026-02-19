@@ -54,7 +54,7 @@ export function search(options: { query: string; limit?: number }): Result[] {}
 export function search(options: { query: string; limit?: number }): Result[] {}
 ```
 
-**Preferred (VS Code hover/autocomplete friendly pattern):**
+**Preferred (VS Code hover/autocomplete-friendly pattern):**
 
 ```ts
 type SearchOptions = {

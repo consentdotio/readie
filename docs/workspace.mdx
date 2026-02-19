@@ -12,6 +12,12 @@ Use `generate:workspace` to scan child directories and process projects that con
 npx readie generate:workspace --root ./packages --config-name readie.json
 ```
 
+Disable global config discovery and merge when needed:
+
+```bash
+npx readie generate:workspace --root ./packages --config-name readie.json --no-global
+```
+
 ## Filter Specific Packages
 
 Use `--package` to target specific directories by name.

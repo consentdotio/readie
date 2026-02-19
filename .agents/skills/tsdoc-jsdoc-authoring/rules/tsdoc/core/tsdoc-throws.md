@@ -12,7 +12,7 @@ Use `@throws` for expected, contract-relevant failures.
 **Use this when:** callers should handle known failure modes.  
 **Avoid this when:** documenting incidental low-level errors with no API contract value.
 
-**Incorrect (no throw contract):**
+**Incorrect (no-throw-contract):**
 
 ```ts
 /**
