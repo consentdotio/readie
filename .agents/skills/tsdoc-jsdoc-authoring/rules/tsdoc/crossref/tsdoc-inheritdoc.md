@@ -19,7 +19,7 @@ Use `@inheritDoc` only when behavior is truly equivalent to the referenced decla
  * @inheritDoc BaseClient.fetch
  */
 export class CachedClient extends BaseClient {
-  public override fetch(id: string): Promise<Item> {}
+	public override fetch(id: string): Promise<Item> {}
 }
 ```
 
@@ -34,6 +34,6 @@ export class CachedClient extends BaseClient {
  * and refresh the cache asynchronously.
  */
 export class CachedClient extends BaseClient {
-  public override fetch(id: string): Promise<Item> {}
+	public override fetch(id: string): Promise<Item> {}
 }
 ```

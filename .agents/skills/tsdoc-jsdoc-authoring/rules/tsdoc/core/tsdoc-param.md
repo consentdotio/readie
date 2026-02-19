@@ -58,10 +58,10 @@ export function search(options: { query: string; limit?: number }): Result[] {}
 
 ```ts
 type SearchOptions = {
-  /** Query string used to match results. */
-  query: string;
-  /** Maximum number of results to return. */
-  limit?: number;
+	/** Query string used to match results. */
+	query: string;
+	/** Maximum number of results to return. */
+	limit?: number;
 };
 
 /**

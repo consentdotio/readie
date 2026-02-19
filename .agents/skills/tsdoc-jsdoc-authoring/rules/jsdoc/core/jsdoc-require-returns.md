@@ -19,7 +19,7 @@ This prevents missing return contracts and inconsistent return documentation.
 ```js
 /** Foo. */
 function quux() {
-  return foo;
+	return foo;
 }
 ```
 
@@ -31,7 +31,7 @@ function quux() {
  * @returns Foo?
  */
 function quux() {
-  return foo;
+	return foo;
 }
 ```
 
@@ -40,7 +40,7 @@ function quux() {
 ```js
 /** @returns Foo. */
 function quux() {
-  return foo;
+	return foo;
 }
 ```
 

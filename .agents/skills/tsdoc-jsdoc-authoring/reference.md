@@ -80,8 +80,8 @@ export async function getProfile(): Promise<UserProfile> {}
  * @returns A map from key to item.
  */
 export function toMap<T>(
-  items: T[],
-  getKey: (item: T) => string
+	items: T[],
+	getKey: (item: T) => string
 ): Map<string, T> {}
 ```
 
@@ -169,10 +169,10 @@ For best VS Code hover and autocomplete docs on object properties, use a named t
 
 ```ts
 type SearchOptions = {
-  /** Query string used to match results. */
-  query: string;
-  /** Maximum number of results to return. */
-  limit?: number;
+	/** Query string used to match results. */
+	query: string;
+	/** Maximum number of results to return. */
+	limit?: number;
 };
 
 /**

@@ -25,10 +25,10 @@ function quux() {}
 
 ```js
 class Foo {
-  /**
-   * @implements {SomeClass}
-   */
-  constructor() {}
+	/**
+	 * @implements {SomeClass}
+	 */
+	constructor() {}
 }
 ```
 
