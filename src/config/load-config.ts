@@ -284,10 +284,14 @@ const resolveMergedCustomSections = (
 		return;
 	}
 
-	return {
-		...globalCustomSections,
-		...projectCustomSections,
-	};
+	return globalCustomSections
+		? {
+				...globalCustomSections,
+				...projectCustomSections,
+			}
+		: {
+				...projectCustomSections,
+			};
 };
 
 export const mergeConfigs = (
