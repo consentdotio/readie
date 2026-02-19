@@ -13,17 +13,12 @@
 	"bugs": {
 		"url": "https://github.com/consentdotio/readie/issues"
 	},
+	"license": "MIT",
+	"author": "Christopher Burns <burnedchris>",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/consentdotio/readie.git"
 	},
-	"license": "MIT",
-	"author": "Christopher Burns <burnedchris>",
-	"type": "module",
-	"imports": {
-		"#src/*": "./src/*"
-	},
-	"main": "dist/index.js",
 	"bin": {
 		"readie": "dist/index.js"
 	},
@@ -37,6 +32,11 @@
 		"CODE_OF_CONDUCT.md",
 		"SECURITY.md"
 	],
+	"type": "module",
+	"main": "dist/index.js",
+	"imports": {
+		"#src/*": "./src/*"
+	},
 	"scripts": {
 		"build": "bun build src/index.ts --outdir dist --target node --minify",
 		"changeset": "changeset",
