@@ -197,8 +197,10 @@ const slugifyHeading = (title: string) =>
 		.trim()
 		.replaceAll(/\s+/g, "-");
 
+type TocTitleEntry = [title: string, section: string];
+
 const createTocTitles = (config: ReadieConfig, sections: ReadmeSections) => {
-	const tocSectionTitles = [
+	const tocSectionTitles: TocTitleEntry[] = [
 		["Key Features", sections.featuresBlock],
 		["Prerequisites", sections.prerequisitesBlock],
 		["Quick Start", sections.quickStartBlock],
@@ -213,21 +215,24 @@ const createTocTitles = (config: ReadieConfig, sections: ReadmeSections) => {
 		["Contributing", sections.contributingBlock],
 		["Security", sections.securityBlock],
 		["License", sections.licenseBlock],
-	].filter(([, section]) => isNonEmpty(section));
+	];
+	const visibleTocSectionTitles = tocSectionTitles.filter(([, section]) =>
+		isNonEmpty(section)
+	);
 
 	if (!isNonEmpty(sections.customSectionsBlock)) {
-		return tocSectionTitles;
+		return visibleTocSectionTitles;
 	}
 
 	for (const key of Object.keys(config.customSections ?? {})) {
-		tocSectionTitles.push([key, `## ${key}`]);
+		visibleTocSectionTitles.push([key, `## ${key}`]);
 	}
-	return tocSectionTitles;
+	return visibleTocSectionTitles;
 };
 
 const createTocBlock = (
 	includeTableOfContents: boolean | undefined,
-	titles: string[][]
+	titles: TocTitleEntry[]
 ) => {
 	if (includeTableOfContents === false || titles.length === 0) {
 		return "";
