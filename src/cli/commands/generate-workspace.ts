@@ -1,12 +1,11 @@
-import path from "node:path";
-
 import { Command, Options } from "@effect/cli";
 import { Effect } from "effect";
+import { resolve } from "pathe";
 
 import {
   generateWorkspaceReadmes,
   parsePackageList,
-} from "../../readme-generator/generator.js";
+} from "#src/readme-generator/generator";
 
 interface GenerateWorkspaceCommandArgs {
   root: string;
@@ -40,7 +39,7 @@ export const generateWorkspaceCommand = Command.make(
     root: Options.directory("root").pipe(
       Options.withAlias("r"),
       Options.withDescription("Workspace root directory"),
-      Options.withDefault(path.resolve("./packages"))
+      Options.withDefault(resolve("./packages"))
     ),
     strict: Options.boolean("strict").pipe(
       Options.withDescription("Exit with code 1 if any project fails")
@@ -54,7 +53,7 @@ export const generateWorkspaceCommand = Command.make(
     strict,
     noGlobal,
   }: GenerateWorkspaceCommandArgs) =>
-    Effect.gen(function* generateWorkspaceCommand() {
+    Effect.gen(function* runGenerateWorkspaceCommand() {
       const result = yield* Effect.tryPromise({
         catch: (error: unknown) =>
           error instanceof Error

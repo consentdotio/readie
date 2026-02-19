@@ -1,17 +1,17 @@
-import fs from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
+import { writeFile } from "fs-extra";
+import { join } from "pathe";
+import { temporaryDirectory } from "tempy";
 
-import { loadReadieConfig } from "../src/config/load-config";
+import { loadReadieConfig } from "#src/config/load-config.js";
 
 const createTempFile = async (contents: string) => {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "readie-test-"));
-  const filePath = path.join(dir, "readie.json");
-  await fs.writeFile(filePath, contents, "utf8");
+  const dir = temporaryDirectory();
+  const filePath = join(dir, "readie.json");
+  await writeFile(filePath, contents, "utf8");
   return filePath;
 };
 
-describe(loadReadieConfig, () => {
+describe("load readie config", () => {
   it("loads a valid config", async () => {
     const configPath = await createTempFile(
       JSON.stringify({

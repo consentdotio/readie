@@ -14,60 +14,30 @@ export interface ResolvedInvocation {
 const isHelpFlag = (value: string | undefined) =>
   value === "--help" || value === "-h";
 
+const modeFromToken = (token: string | undefined): InvocationMode => {
+  if (!token) {
+    return "generate";
+  }
+  if (isHelpFlag(token) || token === "help") {
+    return "help";
+  }
+
+  const commandModes: Record<string, InvocationMode> = {
+    generate: "generate",
+    "generate:workspace": "generate:workspace",
+    init: "init",
+  };
+
+  return commandModes[token] ?? "unknown";
+};
+
 export const resolveInvocation = (args: string[]): ResolvedInvocation => {
   const [first, ...rest] = args;
-
-  if (!first) {
-    return {
-      commandArgs: [],
-      mode: "generate",
-      originalArgs: args,
-    };
-  }
-
-  if (isHelpFlag(first)) {
-    return {
-      commandArgs: rest,
-      mode: "help",
-      originalArgs: args,
-    };
-  }
-
-  if (first === "generate") {
-    return {
-      commandArgs: rest,
-      mode: "generate",
-      originalArgs: args,
-    };
-  }
-
-  if (first === "generate:workspace") {
-    return {
-      commandArgs: rest,
-      mode: "generate:workspace",
-      originalArgs: args,
-    };
-  }
-
-  if (first === "init") {
-    return {
-      commandArgs: rest,
-      mode: "init",
-      originalArgs: args,
-    };
-  }
-
-  if (first === "help") {
-    return {
-      commandArgs: rest,
-      mode: "help",
-      originalArgs: args,
-    };
-  }
+  const mode = modeFromToken(first);
 
   return {
-    commandArgs: args,
-    mode: "unknown",
+    commandArgs: mode === "unknown" ? args : rest,
+    mode,
     originalArgs: args,
   };
 };

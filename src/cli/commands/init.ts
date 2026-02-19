@@ -1,11 +1,9 @@
-import * as fssync from "node:fs";
-import fs from "node:fs/promises";
-import path from "node:path";
-
 import { Command, Options } from "@effect/cli";
 import { Effect } from "effect";
+import { existsSync, writeFile } from "fs-extra";
+import { resolve } from "pathe";
 
-import { starterConfigText } from "../../config/starter-config.js";
+import { starterConfigText } from "#src/config/starter-config";
 
 interface InitCommandArgs {
   config: string;
@@ -26,9 +24,9 @@ export const initCommand = Command.make(
     ),
   },
   ({ config, force }: InitCommandArgs) =>
-    Effect.gen(function* initCommand() {
-      const configPath = path.resolve(config);
-      const exists = fssync.existsSync(configPath);
+    Effect.gen(function* runInitCommand() {
+      const configPath = resolve(config);
+      const exists = existsSync(configPath);
 
       if (exists && !force) {
         yield* Effect.fail(
@@ -43,7 +41,7 @@ export const initCommand = Command.make(
           error instanceof Error
             ? error
             : new Error(`Failed to write config: ${String(error)}`),
-        try: () => fs.writeFile(configPath, starterConfigText, "utf8"),
+        try: () => writeFile(configPath, starterConfigText, "utf8"),
       });
 
       yield* Effect.sync(() => {

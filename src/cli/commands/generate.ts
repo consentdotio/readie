@@ -1,7 +1,7 @@
 import { Command, Options } from "@effect/cli";
 import { Effect } from "effect";
 
-import { generateReadmeFromConfig } from "../../readme-generator/generator.js";
+import { generateReadmeFromConfig } from "#src/readme-generator/generator";
 
 interface GenerateCommandArgs {
   config: string;
@@ -9,6 +9,13 @@ interface GenerateCommandArgs {
   dryRun: boolean;
   noGlobal: boolean;
 }
+
+const resultStatus = (updated: boolean, dryRun: boolean) => {
+  if (!updated) {
+    return "No changes";
+  }
+  return dryRun ? "Would update" : "Generated";
+};
 
 export const generateCommand = Command.make(
   "generate",
@@ -31,7 +38,7 @@ export const generateCommand = Command.make(
     ),
   },
   ({ config, output, dryRun, noGlobal }: GenerateCommandArgs) =>
-    Effect.gen(function* generateCommand() {
+    Effect.gen(function* runGenerateCommand() {
       const result = yield* Effect.tryPromise({
         catch: (error: unknown) =>
           error instanceof Error
@@ -47,11 +54,7 @@ export const generateCommand = Command.make(
       });
 
       yield* Effect.sync(() => {
-        const status = result.updated
-          ? (dryRun
-            ? "Would update"
-            : "Generated")
-          : "No changes";
+        const status = resultStatus(result.updated, dryRun);
         console.log(`${status}: ${result.outputPath}`);
       });
     })

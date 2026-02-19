@@ -1,6 +1,6 @@
-import { resolveInvocation } from "../src/cli/resolve-invocation";
+import { resolveInvocation } from "#src/cli/resolve-invocation.js";
 
-describe(resolveInvocation, () => {
+describe("resolve invocation routing", () => {
   it("defaults to generate when no args are passed", () => {
     const resolved = resolveInvocation([]);
     expect(resolved.mode).toBe("generate");

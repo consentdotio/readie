@@ -1,9 +1,8 @@
-import fs from "node:fs/promises";
-import path from "node:path";
-
 import { Schema } from "effect";
+import { pathExists, readFile } from "fs-extra";
+import { dirname, join, resolve } from "pathe";
 
-import type { ReadieConfig, ReadieGlobalConfig } from "./types.js";
+import type { ReadieConfig, ReadieGlobalConfig } from "./types";
 
 const commandSchema = Schema.Struct({
   description: Schema.NonEmptyString,
@@ -101,7 +100,7 @@ const decodeReadieGlobalConfig = Schema.decodeUnknownSync(
 const GLOBAL_CONFIG_NAME = "readie.global.json";
 
 const parseJsonFile = async (absolutePath: string): Promise<unknown> => {
-  const raw = await fs.readFile(absolutePath, "utf8");
+  const raw = await readFile(absolutePath, "utf8");
   try {
     return JSON.parse(raw);
   } catch (error) {
@@ -115,7 +114,7 @@ const parseJsonFile = async (absolutePath: string): Promise<unknown> => {
 export const loadReadieConfig = async (
   configPath: string
 ): Promise<ReadieConfig> => {
-  const absolutePath = path.resolve(configPath);
+  const absolutePath = resolve(configPath);
   const parsed = await parseJsonFile(absolutePath);
 
   try {
@@ -132,7 +131,7 @@ export const loadReadieConfig = async (
 const loadGlobalReadieConfig = async (
   configPath: string
 ): Promise<ReadieGlobalConfig> => {
-  const absolutePath = path.resolve(configPath);
+  const absolutePath = resolve(configPath);
   const parsed = await parseJsonFile(absolutePath);
 
   try {
@@ -149,18 +148,15 @@ const loadGlobalReadieConfig = async (
 export const loadGlobalConfig = async (
   startDir: string
 ): Promise<ReadieGlobalConfig | null> => {
-  let current = path.resolve(startDir);
+  let current = resolve(startDir);
 
   while (true) {
-    const candidate = path.join(current, GLOBAL_CONFIG_NAME);
-    try {
-      await fs.access(candidate);
+    const candidate = join(current, GLOBAL_CONFIG_NAME);
+    if (await pathExists(candidate)) {
       return await loadGlobalReadieConfig(candidate);
-    } catch {
-      // Keep walking up until filesystem root.
     }
 
-    const parent = path.dirname(current);
+    const parent = dirname(current);
     if (parent === current) {
       return null;
     }
@@ -183,17 +179,43 @@ const interpolatePlaceholders = (
     (match, key: string) => placeholders[key] ?? match
   );
 
-const interpolateTopLevelStrings = (
+const createInterpolationPlaceholders = (
   config: ReadieConfig,
   interpolationContext: InterpolationContext
-): ReadieConfig => {
+): Record<string, string> => {
   const resolvedPackageName =
     interpolationContext.packageName?.trim() || config.title;
-  const placeholders: Record<string, string> = {
+
+  return {
     packageName: resolvedPackageName,
     packageNameEncoded: encodeURIComponent(resolvedPackageName),
     title: config.title,
   };
+};
+
+const interpolateCustomSections = (
+  customSections: Record<string, string> | undefined,
+  placeholders: Record<string, string>
+): Record<string, string> | undefined => {
+  if (!customSections) {
+    return;
+  }
+
+  const interpolatedSections: Record<string, string> = {};
+  for (const [key, value] of Object.entries(customSections)) {
+    interpolatedSections[key] = interpolatePlaceholders(value, placeholders);
+  }
+  return interpolatedSections;
+};
+
+const interpolateTopLevelStrings = (
+  config: ReadieConfig,
+  interpolationContext: InterpolationContext
+): ReadieConfig => {
+  const placeholders = createInterpolationPlaceholders(
+    config,
+    interpolationContext
+  );
   const interpolated = { ...config } as Record<string, unknown>;
 
   for (const [key, value] of Object.entries(interpolated)) {
@@ -202,14 +224,10 @@ const interpolateTopLevelStrings = (
     }
   }
 
-  // Interpolate customSections values
-  if (config.customSections) {
-    const interpolatedSections: Record<string, string> = {};
-    for (const [key, value] of Object.entries(config.customSections)) {
-      interpolatedSections[key] = interpolatePlaceholders(value, placeholders);
-    }
-    interpolated.customSections = interpolatedSections;
-  }
+  interpolated.customSections = interpolateCustomSections(
+    config.customSections,
+    placeholders
+  );
 
   return interpolated as unknown as ReadieConfig;
 };
@@ -231,42 +249,56 @@ const resolveMergedValue = <T>(
   return globalValue === null ? undefined : (globalValue as T | undefined);
 };
 
+const readGlobalCustomSections = (global: Record<string, unknown>) => {
+  if (typeof global.customSections !== "object" || !global.customSections) {
+    return;
+  }
+  return global.customSections as Record<string, string>;
+};
+
+const readProjectCustomSections = (project: Record<string, unknown>) => {
+  const projectCustomSections = project.customSections;
+  if (projectCustomSections === null) {
+    return null;
+  }
+  if (typeof projectCustomSections !== "object" || !projectCustomSections) {
+    return;
+  }
+  return projectCustomSections as Record<string, string>;
+};
+
+const resolveMergedCustomSections = (
+  globalConfig: ReadieGlobalConfig | null,
+  projectConfig: ReadieConfig
+) => {
+  const project = projectConfig as unknown as Record<string, unknown>;
+  const global = (globalConfig ?? {}) as Record<string, unknown>;
+  const globalCustomSections = readGlobalCustomSections(global);
+
+  if (!hasOwn(project, "customSections")) {
+    return globalCustomSections;
+  }
+
+  const projectCustomSections = readProjectCustomSections(project);
+  if (projectCustomSections === null || !projectCustomSections) {
+    return;
+  }
+
+  return {
+    ...globalCustomSections,
+    ...projectCustomSections,
+  };
+};
+
 export const mergeConfigs = (
   globalConfig: ReadieGlobalConfig | null,
   projectConfig: ReadieConfig,
   interpolationContext: InterpolationContext = {}
 ): ReadieConfig => {
-  const mergedCustomSections = (() => {
-    const project = projectConfig as unknown as Record<string, unknown>;
-    const global = (globalConfig ?? {}) as Record<string, unknown>;
-
-    if (hasOwn(project, "customSections")) {
-      const projectCustomSections = project.customSections;
-      if (projectCustomSections === null) {
-        return;
-      }
-      if (
-        typeof projectCustomSections === "object" &&
-        projectCustomSections !== null
-      ) {
-        return {
-          ...((global.customSections as Record<string, string> | undefined) ??
-            {}),
-          ...(projectCustomSections as Record<string, string>),
-        };
-      }
-      return;
-    }
-
-    if (
-      typeof global.customSections === "object" &&
-      global.customSections !== null
-    ) {
-      return global.customSections as Record<string, string>;
-    }
-
-    return;
-  })();
+  const mergedCustomSections = resolveMergedCustomSections(
+    globalConfig,
+    projectConfig
+  );
 
   const merged: ReadieConfig = {
     $schema: resolveMergedValue("$schema", projectConfig, globalConfig),

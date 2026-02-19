@@ -1,6 +1,6 @@
-import { baseReadmeTemplate } from "../src/readme-generator/template";
+import { baseReadmeTemplate } from "#src/readme-generator/template.js";
 
-describe(baseReadmeTemplate, () => {
+describe("base readme template", () => {
   it("renders neutral markdown without c15t defaults", () => {
     const markdown = baseReadmeTemplate({
       description: "A neutral README.",
@@ -12,11 +12,15 @@ describe(baseReadmeTemplate, () => {
       usage: ["Run the command", "```bash\nnpx readie\n```"],
     });
 
-    expect(markdown).toContain("# Readie Demo");
-    expect(markdown).toContain("## Table of Contents");
-    expect(markdown).toContain("## Key Features");
-    expect(markdown).toContain("## Security");
-    expect(markdown).not.toContain("c15t");
-    expect(markdown).not.toContain("consent.io");
+    const requiredHeadings = [
+      "# Readie Demo",
+      "## Table of Contents",
+      "## Key Features",
+      "## Security",
+    ];
+    expect(
+      requiredHeadings.every((heading) => markdown.includes(heading))
+    ).toBeTruthy();
+    expect(markdown).not.toMatch(/c15t|consent\.io/);
   });
 });

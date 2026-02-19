@@ -1,4 +1,4 @@
-import type { ReadieConfig } from "./types.js";
+import type { ReadieConfig } from "./types";
 
 export const DEFAULT_SCHEMA_URL =
   "https://unpkg.com/readie/schemas/readie.schema.json";

@@ -1,5 +1,5 @@
-import { mergeConfigs } from "../src/config/load-config";
-import type { ReadieConfig, ReadieGlobalConfig } from "../src/config/types";
+import { mergeConfigs } from "#src/config/load-config.js";
+import type { ReadieConfig, ReadieGlobalConfig } from "#src/config/types.js";
 
 const createProjectConfig = (
   overrides: Partial<ReadieConfig> = {}
@@ -9,7 +9,7 @@ const createProjectConfig = (
   ...overrides,
 });
 
-describe(mergeConfigs, () => {
+describe("merge configs", () => {
   it("interpolates top-level global string placeholders", () => {
     const globalConfig: ReadieGlobalConfig = {
       banner: '<h1 align="center">{{title}}</h1>',
@@ -29,7 +29,7 @@ describe(mergeConfigs, () => {
       "Built by My Package - @c15t/react - %40c15t%2Freact"
     );
     expect(merged.features).toStrictEqual(["Feature A"]);
-    expect(merged.customSections?.Notes).toBe("Package: {{title}}");
+    expect(merged.customSections?.Notes).toBe("Package: My Package");
   });
 
   it("preserves project-over-global precedence before interpolation", () => {
