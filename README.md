@@ -63,6 +63,14 @@ You can also run it without global install via `npx readie`.
 3. Use `npx readie generate:workspace --root ./packages` to generate for multiple packages.
 4. Use `--dry-run` to preview changes and `--strict` to fail CI on generation errors.
 5. Extend generated docs with rich markdown via `quickStart`, `customSections`, and `footer`.
+6. Use placeholders in top-level strings of `readie.global.json`: `{{title}}`, `{{packageName}}`, and `{{packageNameEncoded}}`.
+
+```json
+{
+  "banner": "<h1 align=\"center\">{{title}}</h1>",
+  "footer": "https://example.com?ref={{packageNameEncoded}}"
+}
+```
 
 ```bash
 # Single project
@@ -70,14 +78,6 @@ npx readie --config ./readie.json
 
 # Workspace with package filtering
 npx readie generate:workspace --root ./packages --package ui --package api --dry-run
-```
-
-`readie.global.json` supports a `{{title}}` placeholder in top-level string fields (for example `banner`, `footer`, or `quickStart`) that resolves to each project's `readie.json` title during merge:
-
-```json
-{
-  "banner": "<h1 align=\"center\">{{title}}</h1>"
-}
 ```
 
 ## Available Commands

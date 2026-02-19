@@ -1,11 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://unpkg.com/readie/schemas/readie.schema.json",
-  "title": "Readie Config",
-  "description": "Configuration for generating README files with Readie.",
+  "$id": "https://unpkg.com/readie/schemas/readie.global.schema.json",
+  "title": "Readie Global Config",
+  "description": "Global defaults for README generation that can be merged into project readie.json files.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["title", "description"],
   "properties": {
     "$schema": {
       "type": "string",
@@ -27,7 +26,7 @@
     },
     "output": {
       "type": "string",
-      "description": "Output README path. Relative paths are resolved from the config file directory."
+      "description": "Output README path. Relative paths are resolved from the project config file directory."
     },
     "includeTableOfContents": {
       "type": "boolean",
@@ -92,7 +91,7 @@
     },
     "banner": {
       "type": "string",
-      "description": "Raw markdown or HTML rendered before the title. In readie.global.json, top-level string values support `{{title}}`, `{{packageName}}`, and `{{packageNameEncoded}}` interpolation."
+      "description": "Raw markdown or HTML rendered before the title. Supports {{title}}, {{packageName}}, and {{packageNameEncoded}} interpolation."
     },
     "quickStart": {
       "type": "string",
@@ -126,7 +125,7 @@
     },
     "footer": {
       "type": "string",
-      "description": "Raw markdown appended to the end of the README."
+      "description": "Raw markdown appended to the end of the README. Supports {{title}}, {{packageName}}, and {{packageNameEncoded}} interpolation."
     },
     "docsLink": {
       "type": "string"
@@ -138,18 +137,5 @@
       "type": "object",
       "additionalProperties": { "type": "string" }
     }
-  },
-  "examples": [
-    {
-      "$schema": "https://unpkg.com/readie/schemas/readie.schema.json",
-      "version": "1",
-      "title": "my-library",
-      "description": "A concise project description.",
-      "includeTableOfContents": true,
-      "features": ["Fast", "Typed", "Zero-config"],
-      "installation": ["```bash\\nnpm i my-library\\n```"],
-      "usage": ["Import and use the library in your project."],
-      "commands": [{ "name": "my-cli init", "description": "Initialize project files." }]
-    }
-  ]
+  }
 }

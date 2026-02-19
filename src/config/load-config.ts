@@ -152,19 +152,32 @@ export const loadGlobalConfig = async (startDir: string): Promise<ReadieGlobalCo
 
 const hasOwn = (obj: object, key: string): boolean => Object.prototype.hasOwnProperty.call(obj, key);
 
-const interpolateTitlePlaceholder = (value: string, title: string): string =>
-  value.replace(/\{\{\s*title\s*\}\}/g, title);
+interface InterpolationContext {
+  packageName?: string;
+}
 
-const interpolateTopLevelStrings = (config: ReadieConfig): ReadieConfig => {
+const interpolatePlaceholders = (value: string, placeholders: Record<string, string>): string =>
+  value.replace(/\{\{\s*([a-zA-Z0-9_]+)\s*\}\}/g, (match, key: string) => placeholders[key] ?? match);
+
+const interpolateTopLevelStrings = (
+  config: ReadieConfig,
+  interpolationContext: InterpolationContext,
+): ReadieConfig => {
+  const resolvedPackageName = interpolationContext.packageName?.trim() || config.title;
+  const placeholders: Record<string, string> = {
+    title: config.title,
+    packageName: resolvedPackageName,
+    packageNameEncoded: encodeURIComponent(resolvedPackageName),
+  };
   const interpolated = { ...config } as Record<string, unknown>;
 
   for (const [key, value] of Object.entries(interpolated)) {
     if (typeof value === 'string') {
-      interpolated[key] = interpolateTitlePlaceholder(value, config.title);
+      interpolated[key] = interpolatePlaceholders(value, placeholders);
     }
   }
 
-  return interpolated as ReadieConfig;
+  return interpolated as unknown as ReadieConfig;
 };
 
 const resolveMergedValue = <T>(
@@ -187,6 +200,7 @@ const resolveMergedValue = <T>(
 export const mergeConfigs = (
   globalConfig: ReadieGlobalConfig | null,
   projectConfig: ReadieConfig,
+  interpolationContext: InterpolationContext = {},
 ): ReadieConfig => {
   const mergedCustomSections = (() => {
     const project = projectConfig as unknown as Record<string, unknown>;
@@ -240,5 +254,5 @@ export const mergeConfigs = (
     customSections: mergedCustomSections,
   };
 
-  return interpolateTopLevelStrings(merged);
+  return interpolateTopLevelStrings(merged, interpolationContext);
 };

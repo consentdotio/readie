@@ -23,7 +23,7 @@ export const parsePackageList = (values: string[]): Set<string> => {
   return packages;
 };
 
-export const resolveOutputPath = (
+const resolveOutputPath = (
   configPath: string,
   configOutputPath: string | undefined,
   cliOutputPath: string | undefined,
@@ -37,6 +37,18 @@ export const resolveOutputPath = (
   return path.resolve(path.dirname(configPath), 'README.md');
 };
 
+const resolvePackageName = async (configPath: string): Promise<string | undefined> => {
+  const packageJsonPath = path.join(path.dirname(configPath), 'package.json');
+
+  try {
+    const rawPackageJson = await fs.readFile(packageJsonPath, 'utf8');
+    const parsed = JSON.parse(rawPackageJson) as { name?: unknown };
+    return typeof parsed.name === 'string' && parsed.name.trim().length > 0 ? parsed.name : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 export const generateReadmeFromConfig = async ({
   configPath,
   outputPath,
@@ -46,7 +58,8 @@ export const generateReadmeFromConfig = async ({
   const absoluteConfigPath = path.resolve(configPath);
   const projectConfig = await loadReadieConfig(absoluteConfigPath);
   const globalConfig = useGlobalConfig ? await loadGlobalConfig(path.dirname(absoluteConfigPath)) : null;
-  const config = mergeConfigs(globalConfig, projectConfig);
+  const packageName = await resolvePackageName(absoluteConfigPath);
+  const config = mergeConfigs(globalConfig, projectConfig, { packageName });
   const resolvedOutputPath = resolveOutputPath(absoluteConfigPath, config.output, outputPath);
 
   const content = baseReadmeTemplate(config);

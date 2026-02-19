@@ -30,6 +30,8 @@
     "Use `npx readie generate:workspace --root ./packages` to generate for multiple packages.",
     "Use `--dry-run` to preview changes and `--strict` to fail CI on generation errors.",
     "Extend generated docs with rich markdown via `quickStart`, `customSections`, and `footer`.",
+    "Use placeholders in top-level strings of `readie.global.json`: `{{title}}`, `{{packageName}}`, and `{{packageNameEncoded}}`.",
+    "```json\n{\n  \"banner\": \"<h1 align=\\\"center\\\">{{title}}</h1>\",\n  \"footer\": \"https://example.com?ref={{packageNameEncoded}}\"\n}\n```",
     "```bash\n# Single project\nnpx readie --config ./readie.json\n\n# Workspace with package filtering\nnpx readie generate:workspace --root ./packages --package ui --package api --dry-run\n```"
   ],
   "commands": [
