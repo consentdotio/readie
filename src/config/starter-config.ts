@@ -1,8 +1,14 @@
 import type { ReadieConfig } from "./types";
 
+/**
+ * Default schema URL written to starter configs.
+ */
 export const DEFAULT_SCHEMA_URL =
 	"https://unpkg.com/readie/schemas/readie.schema.json";
 
+/**
+ * Baseline `readie.json` content used by the `init` command.
+ */
 export const starterConfig: ReadieConfig = {
 	$schema: DEFAULT_SCHEMA_URL,
 	description: "A short description of what this project does.",
@@ -15,4 +21,7 @@ export const starterConfig: ReadieConfig = {
 	version: "1",
 };
 
+/**
+ * Stringified starter config with a trailing newline for file output.
+ */
 export const starterConfigText = `${JSON.stringify(starterConfig, null, 2)}\n`;

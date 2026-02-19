@@ -30,6 +30,9 @@ const runInit = (args: string[]) =>
 		version,
 	})(args).pipe(Effect.provide(NodeContext.layer));
 
+/**
+ * Selects and builds the Effect program for the resolved invocation mode.
+ */
 const selectCommandEffect = (
 	resolved: ReturnType<typeof resolveInvocation>
 ) => {
@@ -45,6 +48,9 @@ const selectCommandEffect = (
 	throw new Error(`Unsupported invocation mode: ${resolved.mode}`);
 };
 
+/**
+ * Normalizes CLI error output and sets non-zero exit code.
+ */
 const handleError = (error: unknown) => {
 	if (ValidationError.isValidationError(error)) {
 		console.error(String(error));
@@ -56,6 +62,9 @@ const handleError = (error: unknown) => {
 	process.exitCode = 1;
 };
 
+/**
+ * Resolves invocation mode and executes the selected command flow.
+ */
 const main = async () => {
 	const resolved = resolveInvocation(process.argv.slice(2));
 

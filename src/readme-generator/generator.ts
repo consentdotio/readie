@@ -15,6 +15,12 @@ import type {
 
 import { baseReadmeTemplate } from "./template";
 
+/**
+ * Normalizes repeated and comma-separated `--package` option values.
+ *
+ * @param {string[]} values - Raw CLI values that may contain comma-delimited package names.
+ * @returns {Set<string>} A de-duplicated set of trimmed package names.
+ */
 export const parsePackageList = (values: string[]): Set<string> => {
 	const packages = new Set<string>();
 	for (const value of values) {
@@ -28,6 +34,10 @@ export const parsePackageList = (values: string[]): Set<string> => {
 	return packages;
 };
 
+/**
+ * Resolves the final README output path using CLI override first, then config,
+ * then a default `README.md` next to the config file.
+ */
 const resolveOutputPath = (
 	configPath: string,
 	configOutputPath: string | undefined,
@@ -42,6 +52,11 @@ const resolveOutputPath = (
 	return resolve(dirname(configPath), "README.md");
 };
 
+/**
+ * Attempts to read a package name from `package.json` beside the config file.
+ *
+ * @returns {Promise<string | undefined>} The package name when present, otherwise `undefined`.
+ */
 const resolvePackageName = async (
 	configPath: string
 ): Promise<string | undefined> => {
@@ -69,6 +84,11 @@ const loadMergedConfig = async (
 	return mergeConfigs(globalConfig, projectConfig, { packageName });
 };
 
+/**
+ * Reads existing file content if the target exists.
+ *
+ * @returns {Promise<string | null>} The current file content, or `null` if the file does not exist.
+ */
 const readExistingContent = async (filePath: string) => {
 	if (!(await pathExists(filePath))) {
 		return null;
@@ -76,6 +96,12 @@ const readExistingContent = async (filePath: string) => {
 	return readFile(filePath, "utf8");
 };
 
+/**
+ * Generates a README for a single project config.
+ *
+ * @param {GenerateSingleOptions} options - Generation options for one config file.
+ * @returns {Promise<GenerateSingleResult>} Generation metadata including output path and whether content changed.
+ */
 export const generateReadmeFromConfig = async ({
 	configPath,
 	outputPath,
@@ -110,6 +136,9 @@ export const generateReadmeFromConfig = async ({
 	};
 };
 
+/**
+ * Returns immediate child directories under `rootDir` that include `configName`.
+ */
 const listProjectDirsWithConfig = async (
 	rootDir: string,
 	configName: string
@@ -137,6 +166,9 @@ const selectProjectDirs = (
 		? allProjectDirs.filter((dir) => packageFilter.has(basename(dir)))
 		: allProjectDirs;
 
+/**
+ * Lists project directory names excluded by the package filter.
+ */
 const collectSkippedByFilter = (
 	allProjectDirs: string[],
 	packageFilter: Set<string>
@@ -149,6 +181,9 @@ const collectSkippedByFilter = (
 		.filter((dirName) => !packageFilter.has(dirName));
 };
 
+/**
+ * Records a project result and emits the corresponding status message.
+ */
 const pushProjectResult = (
 	result: GenerateWorkspaceResult,
 	projectName: string,
@@ -166,6 +201,9 @@ const pushProjectResult = (
 	console.log(`No changes for ${projectName}`);
 };
 
+/**
+ * Generates a README for one workspace project and appends success/failure info.
+ */
 const processWorkspaceProject = async (
 	projectDir: string,
 	configName: string,
@@ -188,6 +226,13 @@ const processWorkspaceProject = async (
 	}
 };
 
+/**
+ * Generates README files for projects inside a workspace root.
+ *
+ * @param {GenerateWorkspaceOptions} options - Workspace generation options.
+ * @returns {Promise<GenerateWorkspaceResult>} Aggregated status across updated, unchanged, skipped, and failed projects.
+ * @throws Error if the workspace root does not exist.
+ */
 export const generateWorkspaceReadmes = async ({
 	rootDir,
 	configName,

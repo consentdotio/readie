@@ -7,15 +7,30 @@ import {
 	parsePackageList,
 } from "#src/readme-generator/generator";
 
+/**
+ * Parsed arguments for the `generate:workspace` command.
+ */
 interface GenerateWorkspaceCommandArgs {
+	/** Workspace root containing project subdirectories. */
 	root: string;
+	/** Config filename to find within each project directory. */
 	configName: string;
+	/** Raw repeatable/comma-delimited package filter values from CLI. */
 	packageValues: string[];
+	/** Enables dry-run mode without writing files. */
 	dryRun: boolean;
+	/** Forces non-zero exit code when any project fails. */
 	strict: boolean;
+	/** Disables discovery of `readie.global.json` when true. */
 	noGlobal: boolean;
 }
 
+/**
+ * CLI command that generates README files for projects under a workspace root.
+ *
+ * In `--strict` mode, the command sets `process.exitCode = 1` when any project
+ * fails, while still printing summary information for the entire run.
+ */
 export const generateWorkspaceCommand = Command.make(
 	"generate:workspace",
 	{

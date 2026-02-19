@@ -7,6 +7,9 @@ import type {
 const isNonEmpty = (value?: string | null): value is string =>
 	typeof value === "string" && value.trim().length > 0;
 
+/**
+ * Collapses excessive blank lines between rendered markdown fragments.
+ */
 const normalizeSections = (sections: string[]) =>
 	sections
 		.join("\n")
@@ -43,6 +46,9 @@ const renderNumberedWithCodeBlocks = (items: string[]) => {
 	return normalizeSections(lines);
 };
 
+/**
+ * Renders a markdown section when content is present.
+ */
 const addSection = (
 	header: string,
 	content: string[] | undefined,
@@ -55,6 +61,9 @@ const addSection = (
 	return `${header}\n\n${body}`.trim();
 };
 
+/**
+ * Renders free-form section content and preserves already-headed markdown.
+ */
 const renderHeadingBlock = (
 	heading: string,
 	content: string | undefined
@@ -115,27 +124,49 @@ const renderLicenseBlock = (license: ReadieConfig["license"]) => {
 };
 
 interface ReadmeSections {
+	/** Optional top-of-file banner block. */
 	bannerBlock: string;
+	/** Main H1 title block. */
 	titleBlock: string;
+	/** Rendered badges block. */
 	badgesBlock: string;
+	/** Key Features section block. */
 	featuresBlock: string;
+	/** Prerequisites section block. */
 	prerequisitesBlock: string;
+	/** Quick Start section block. */
 	quickStartBlock: string;
+	/** Installation section block. */
 	installationBlock: string;
+	/** Manual Installation section block. */
 	manualInstallationBlock: string;
+	/** Usage section block. */
 	usageBlock: string;
+	/** Available Commands section block. */
 	commandsBlock: string;
+	/** Global Flags section block. */
 	globalFlagsBlock: string;
+	/** Documentation link section block. */
 	docsBlock: string;
+	/** Additional Quick Start link section block. */
 	quickStartLinkBlock: string;
+	/** Support section block. */
 	supportBlock: string;
+	/** Contributing section block. */
 	contributingBlock: string;
+	/** Security section block. */
 	securityBlock: string;
+	/** License section block. */
 	licenseBlock: string;
+	/** Concatenated custom section blocks. */
 	customSectionsBlock: string;
+	/** Optional trailing footer block. */
 	footerBlock: string;
 }
 
+/**
+ * Builds all top-level section blocks from a readie config.
+ */
 const createReadmeSections = (config: ReadieConfig): ReadmeSections => {
 	const bannerBlock = isNonEmpty(config.banner) ? config.banner : "";
 	const titleBlock =
@@ -197,6 +228,9 @@ const slugifyHeading = (title: string) =>
 		.trim()
 		.replaceAll(/\s+/g, "-");
 
+/**
+ * Creates unique heading anchors by suffixing duplicate slugs.
+ */
 const createUniqueSlug = (title: string, seenSlugs: Map<string, number>) => {
 	const baseSlug = slugifyHeading(title);
 	const count = seenSlugs.get(baseSlug) ?? 0;
@@ -237,6 +271,9 @@ const createTocTitles = (config: ReadieConfig, sections: ReadmeSections) => {
 	return visibleTocSectionTitles;
 };
 
+/**
+ * Renders a table of contents block from visible section titles.
+ */
 const createTocBlock = (
 	includeTableOfContents: boolean | undefined,
 	titles: TocTitleEntry[]
@@ -251,6 +288,12 @@ const createTocBlock = (
 	return `## Table of Contents\n\n${links}`;
 };
 
+/**
+ * Generates README markdown content for a project config.
+ *
+ * @param {ReadieConfig} rawConfig - Fully merged config used to render the README.
+ * @returns {string} Rendered README markdown with a trailing newline.
+ */
 export const baseReadmeTemplate = (rawConfig: ReadieConfig) => {
 	const sections = createReadmeSections(rawConfig);
 	const tocTitles = createTocTitles(rawConfig, sections);

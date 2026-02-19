@@ -1,3 +1,6 @@
+/**
+ * Prints top-level CLI usage text for the `readie` binary.
+ */
 export const printRootHelp = () => {
 	console.log(`readie
 

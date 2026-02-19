@@ -3,13 +3,23 @@ import { Effect } from "effect";
 
 import { generateReadmeFromConfig } from "#src/readme-generator/generator";
 
+/**
+ * Parsed arguments for the `generate` command.
+ */
 interface GenerateCommandArgs {
+	/** Path to the input readie config file. */
 	config: string;
+	/** Optional output path override. */
 	output: string;
+	/** Enables dry-run mode without writing files. */
 	dryRun: boolean;
+	/** Disables discovery of `readie.global.json` when true. */
 	noGlobal: boolean;
 }
 
+/**
+ * Returns user-facing status text based on write and dry-run outcomes.
+ */
 const resultStatus = (updated: boolean, dryRun: boolean) => {
 	if (!updated) {
 		return "No changes";
@@ -17,6 +27,9 @@ const resultStatus = (updated: boolean, dryRun: boolean) => {
 	return dryRun ? "Would update" : "Generated";
 };
 
+/**
+ * CLI command that generates a README from a single `readie.json` file.
+ */
 export const generateCommand = Command.make(
 	"generate",
 	{
