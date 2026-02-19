@@ -177,6 +177,16 @@ const interpolateTopLevelStrings = (
     }
   }
 
+   // Interpolate customSections values
+  if (config.customSections) {
+    const interpolatedSections: Record<string, string> = {};
+    for (const [key, value] of Object.entries(config.customSections)) {
+      interpolatedSections[key] = interpolatePlaceholders(value, placeholders);
+    }
+    interpolated.customSections = interpolatedSections;
+  }
+
+
   return interpolated as unknown as ReadieConfig;
 };
 

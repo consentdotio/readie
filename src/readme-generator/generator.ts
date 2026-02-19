@@ -44,7 +44,8 @@ const resolvePackageName = async (configPath: string): Promise<string | undefine
     const rawPackageJson = await fs.readFile(packageJsonPath, 'utf8');
     const parsed = JSON.parse(rawPackageJson) as { name?: unknown };
     return typeof parsed.name === 'string' && parsed.name.trim().length > 0 ? parsed.name : undefined;
-  } catch {
+  } catch (error) {
+    console.warn(`Package.json not found at ${packageJsonPath}:`, error);
     return undefined;
   }
 };

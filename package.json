@@ -24,7 +24,8 @@
     "test": "bunx vitest run",
     "test:watch": "bunx vitest",
     "typecheck": "bunx tsc -p tsconfig.json --noEmit",
-    "prepare": "bun run build"
+    "prepare": "bun run build",
+    "changeset": "changeset"
   },
   "keywords": [
     "readme",
@@ -50,11 +51,14 @@
     "@effect/printer": "^0.47.0",
     "@effect/printer-ansi": "^0.47.0",
     "effect": "^3.19.16"
+  
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
-    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "@changesets/changelog-github": "^0.5.1",
+		"@changesets/cli": "^2.29.7",
+    "changeset-conventional-commits": "^0.2.5"
   }
 }

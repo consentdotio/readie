@@ -11,33 +11,37 @@ const writeJson = async (filePath: string, value: unknown) => {
 describe('generateReadmeFromConfig with global interpolation', () => {
   it('injects title and package placeholders in global config', async () => {
     const rootDir = await fs.mkdtemp(path.join(os.tmpdir(), 'readie-global-'));
-    const packageDir = path.join(rootDir, 'packages', 'react');
-    await fs.mkdir(packageDir, { recursive: true });
+    try {
+      const packageDir = path.join(rootDir, 'packages', 'react');
+      await fs.mkdir(packageDir, { recursive: true });
 
-    await writeJson(path.join(rootDir, 'readie.global.json'), {
-      banner: '<h1 align="center">{{title}}</h1>',
-      footer: 'Built for {{ title }} ({{packageNameEncoded}})',
-    });
+      await writeJson(path.join(rootDir, 'readie.global.json'), {
+        banner: '<h1 align="center">{{title}}</h1>',
+        footer: 'Built for {{ title }} ({{packageNameEncoded}})',
+      });
 
-    await writeJson(path.join(packageDir, 'package.json'), {
-      name: '@c15t/react',
-      version: '1.0.0',
-    });
+      await writeJson(path.join(packageDir, 'package.json'), {
+        name: '@c15t/react',
+        version: '1.0.0',
+      });
 
-    const configPath = path.join(packageDir, 'readie.json');
-    await writeJson(configPath, {
-      title: '@c15t/react: React Consent Components',
-      description: 'CMP for React',
-    });
+      const configPath = path.join(packageDir, 'readie.json');
+      await writeJson(configPath, {
+        title: '@c15t/react: React Consent Components',
+        description: 'CMP for React',
+      });
 
-    const result = await generateReadmeFromConfig({
-      configPath,
-      dryRun: false,
-    });
+      const result = await generateReadmeFromConfig({
+        configPath,
+        dryRun: false,
+      });
 
-    const generated = await fs.readFile(result.outputPath, 'utf8');
+      const generated = await fs.readFile(result.outputPath, 'utf8');
 
-    expect(generated).toContain('<h1 align="center">@c15t/react: React Consent Components</h1>');
-    expect(generated).toContain('Built for @c15t/react: React Consent Components (%40c15t%2Freact)');
+      expect(generated).toContain('<h1 align="center">@c15t/react: React Consent Components</h1>');
+      expect(generated).toContain('Built for @c15t/react: React Consent Components (%40c15t%2Freact)');
+    } finally {
+      await fs.rm(rootDir, { recursive: true, force: true });
+    }
   });
 });
