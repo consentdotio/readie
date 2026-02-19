@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 import { Command, ValidationError } from '@effect/cli';
-import { NodeContext, NodeRuntime } from '@effect/platform-node';
+import * as NodeContext from '@effect/platform-node/NodeContext';
+import * as NodeRuntime from '@effect/platform-node/NodeRuntime';
 import { Effect } from 'effect';
 import { generateCommand } from './cli/commands/generate.js';
 import { generateWorkspaceCommand } from './cli/commands/generate-workspace.js';
