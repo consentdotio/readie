@@ -1,0 +1,64 @@
+{
+  "$schema": "https://unpkg.com/readie/schemas/readie.schema.json",
+  "version": "1",
+  "title": "Readie",
+  "description": "Developer-first CLI for generating polished, consistent README files from a simple config.",
+  "includeTableOfContents": true,
+  "features": [
+    "Generate a single project README or many READMEs across a workspace",
+    "Schema-backed configuration with editor autocomplete and validation",
+    "Composable sections for installation, quick start, commands, flags, and more",
+    "Supports custom markdown sections, badges, and project-specific content",
+    "Easy onboarding with starter config generation",
+    "Dry-run and strict workspace options for safe large-scale updates"
+  ],
+  "prerequisites": [
+    "Node.js 18 or later",
+    "npm, pnpm, or yarn",
+    "A project with a `readie.json` config file"
+  ],
+  "manualInstallation": [
+    "",
+    "```bash\nnpm install -g readie\n```",
+    "",
+    "You can also run it without global install via `npx readie`."
+  ],
+  "quickStart": "Create a starter config and generate your README in minutes:\n\n```bash\n# 1) Initialize a config\nnpx readie init\n\n# 2) Generate README.md from readie.json\nnpx readie\n```\n\nFor monorepos/workspaces:\n\n```bash\nnpx readie generate:workspace --root ./packages --config-name readie.json\n```\n\nThis workflow helps teams keep README files consistent while still allowing per-project customization.",
+  "usage": [
+    "Create a config file with `npx readie init`.",
+    "Run `npx readie` (or `npx readie generate`) to generate one README.",
+    "Use `npx readie generate:workspace --root ./packages` to generate for multiple packages.",
+    "Use `--dry-run` to preview changes and `--strict` to fail CI on generation errors.",
+    "Extend generated docs with rich markdown via `quickStart`, `customSections`, and `footer`.",
+    "```bash\n# Single project\nnpx readie --config ./readie.json\n\n# Workspace with package filtering\nnpx readie generate:workspace --root ./packages --package ui --package api --dry-run\n```"
+  ],
+  "commands": [
+    {
+      "name": "readie",
+      "description": "Generate a README from the local readie.json (default command)."
+    },
+    {
+      "name": "readie generate",
+      "description": "Explicit single-project generation command."
+    },
+    {
+      "name": "readie generate:workspace",
+      "description": "Generate READMEs for multiple projects in a workspace."
+    },
+    {
+      "name": "readie init",
+      "description": "Create a starter readie.json in the current directory."
+    }
+  ],
+  "globalFlags": [
+    {
+      "flag": "--help, -h",
+      "description": "Show command help."
+    },
+    {
+      "flag": "--config, -c",
+      "description": "Set a custom config path for supported commands."
+    }
+  ],
+  "docsLink": "https://github.com/readie-cli/readie"
+}

@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+bun-debug.log*
+
+# Test / coverage artifacts
+coverage/
+.vitest/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS / editor files
+.DS_Store
+.idea/
+.vscode/
