@@ -1,0 +1,33 @@
+---
+title: Introduction
+description: Understand what Readie is, how it works, and where it fits in your docs workflow.
+lastModified: 2026-02-19
+---
+
+## What Is Readie?
+
+Readie is a CLI for generating README content from structured config files.
+It helps teams standardize documentation while still allowing per-project customization.
+
+## Why Use It?
+
+- **Consistency:** keep section order and formatting predictable across repositories
+- **Speed:** update docs through config changes instead of manual copy/paste edits
+- **Safety:** compare generated output with existing files before writing
+- **Scale:** apply generation to many projects inside a workspace
+
+## How It Works
+
+1. You create a `readie.json` config in a project.
+2. Readie validates and loads the config.
+3. Readie renders markdown from your configured sections.
+4. Readie writes `README.md` (or a custom output path) when content changed.
+
+## Config Sources
+
+Readie supports two config layers:
+
+- **Project config (`readie.json`)** for package-specific content
+- **Global config (`readie.global.json`)** for shared defaults across multiple projects
+
+When both are present, project values take precedence.

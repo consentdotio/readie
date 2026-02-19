@@ -1,0 +1,58 @@
+---
+title: CLI Reference
+description: Commands and flags available in the Readie CLI.
+lastModified: 2026-02-19
+---
+
+## Top-Level Usage
+
+```bash
+readie [options]
+readie generate [options]
+readie generate:workspace [options]
+readie init [options]
+```
+
+## Commands
+
+### `readie` / `readie generate`
+
+Generate one README from a config file.
+
+Options:
+
+- `--config, -c`: Path to config file (default `./readie.json`)
+- `--output, -o`: Optional output path override
+- `--dry-run`: Show changes without writing files
+- `--no-global`: Disable `readie.global.json` discovery
+
+### `readie generate:workspace`
+
+Generate READMEs for multiple projects under a workspace root.
+
+Options:
+
+- `--root, -r`: Workspace root directory (default `./packages`)
+- `--config-name`: Config filename to search for (default `readie.json`)
+- `--package, -p`: Package filters (repeatable and comma-separated)
+- `--dry-run`: Show changes without writing files
+- `--strict`: Exit with code 1 if any project fails
+- `--no-global`: Disable `readie.global.json` discovery
+
+### `readie init`
+
+Create a starter `readie.json`.
+
+Options:
+
+- `--config, -c`: Path for generated file (default `./readie.json`)
+- `--force, -f`: Overwrite existing config
+
+## Help
+
+```bash
+readie --help
+readie generate --help
+readie generate:workspace --help
+readie init --help
+```
