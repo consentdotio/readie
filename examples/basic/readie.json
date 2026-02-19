@@ -15,7 +15,7 @@
 	"installation": ["```bash\nnpm install acme-toolkit\n```"],
 	"usage": [
 		"Import the toolkit and initialize your client.",
-		"```ts\nimport { createClient } from 'acme-toolkit'\n\nconst client = createClient()\n```"
+		"```ts\nimport { createClient } from \"acme-toolkit\";\n\nconst client = createClient();\n```"
 	],
 	"support": ["Open an issue in your repository tracker."]
 }

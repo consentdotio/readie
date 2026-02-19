@@ -280,7 +280,7 @@ const resolveMergedCustomSections = (
 	}
 
 	const projectCustomSections = readProjectCustomSections(project);
-	if (projectCustomSections === null || !projectCustomSections) {
+	if (projectCustomSections === null || projectCustomSections === undefined) {
 		return;
 	}
 

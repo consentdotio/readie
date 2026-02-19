@@ -22,4 +22,23 @@ describe("resolve invocation routing", () => {
 		expect(resolved.mode).toBe("init");
 		expect(resolved.commandArgs).toStrictEqual(["--force"]);
 	});
+
+	it("routes --help to help mode", () => {
+		const resolved = resolveInvocation(["--help"]);
+		expect(resolved.mode).toBe("help");
+		expect(resolved.commandArgs).toStrictEqual([]);
+	});
+
+	it("routes help command to help mode", () => {
+		const resolved = resolveInvocation(["help"]);
+		expect(resolved.mode).toBe("help");
+		expect(resolved.commandArgs).toStrictEqual([]);
+	});
+
+	it("routes unknown commands to unknown mode", () => {
+		const args = ["invalid-command", "--flag"];
+		const resolved = resolveInvocation(args);
+		expect(resolved.mode).toBe("unknown");
+		expect(resolved.commandArgs).toStrictEqual(args);
+	});
 });

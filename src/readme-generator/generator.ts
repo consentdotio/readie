@@ -1,11 +1,4 @@
-import {
-	existsSync,
-	pathExists,
-	readdir,
-	readFile,
-	readJson,
-	writeFile,
-} from "fs-extra";
+import { pathExists, readdir, readFile, readJson, writeFile } from "fs-extra";
 import { basename, dirname, join, resolve } from "pathe";
 
 import {
@@ -190,7 +183,7 @@ const processWorkspaceProject = async (
 		});
 		pushProjectResult(result, projectName, singleResult.updated, dryRun);
 	} catch (error) {
-		result.failed.push({ error, projectDir: projectName });
+		result.failed.push({ error, projectDir });
 		console.error(`Error generating README for ${projectName}:`, error);
 	}
 };
@@ -203,7 +196,7 @@ export const generateWorkspaceReadmes = async ({
 	useGlobalConfig = true,
 }: GenerateWorkspaceOptions): Promise<GenerateWorkspaceResult> => {
 	const absoluteRootDir = resolve(rootDir);
-	if (!existsSync(absoluteRootDir)) {
+	if (!(await pathExists(absoluteRootDir))) {
 		throw new Error(`Workspace root not found at ${absoluteRootDir}`);
 	}
 

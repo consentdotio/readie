@@ -10,7 +10,7 @@ import { initCommand } from "./cli/commands/init";
 import { printRootHelp } from "./cli/help";
 import { resolveInvocation } from "./cli/resolve-invocation";
 
-const version = "0.1.0";
+const version = "0.0.1";
 
 const runGenerate = (args: string[]) =>
 	Command.run(generateCommand, {
@@ -39,7 +39,10 @@ const selectCommandEffect = (
 	if (resolved.mode === "generate:workspace") {
 		return runGenerateWorkspace(resolved.commandArgs);
 	}
-	return runInit(resolved.commandArgs);
+	if (resolved.mode === "init") {
+		return runInit(resolved.commandArgs);
+	}
+	throw new Error(`Unsupported invocation mode: ${resolved.mode}`);
 };
 
 const handleError = (error: unknown) => {

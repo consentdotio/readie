@@ -39,7 +39,7 @@ export const generateWorkspaceCommand = Command.make(
 		root: Options.directory("root").pipe(
 			Options.withAlias("r"),
 			Options.withDescription("Workspace root directory"),
-			Options.withDefault(resolve("./packages"))
+			Options.withDefault("./packages")
 		),
 		strict: Options.boolean("strict").pipe(
 			Options.withDescription("Exit with code 1 if any project fails")
@@ -54,6 +54,7 @@ export const generateWorkspaceCommand = Command.make(
 		noGlobal,
 	}: GenerateWorkspaceCommandArgs) =>
 		Effect.gen(function* runGenerateWorkspaceCommand() {
+			const resolvedRoot = root ? resolve(root) : resolve("./packages");
 			const result = yield* Effect.tryPromise({
 				catch: (error: unknown) =>
 					error instanceof Error
@@ -64,7 +65,7 @@ export const generateWorkspaceCommand = Command.make(
 						configName,
 						dryRun,
 						packageFilter: parsePackageList(packageValues),
-						rootDir: root,
+						rootDir: resolvedRoot,
 						useGlobalConfig: !noGlobal,
 					}),
 			});

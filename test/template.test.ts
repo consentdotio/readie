@@ -18,9 +18,10 @@ describe("base readme template", () => {
 			"## Key Features",
 			"## Security",
 		];
-		expect(
-			requiredHeadings.every((heading) => markdown.includes(heading))
-		).toBeTruthy();
+		const missingHeadings = requiredHeadings.filter(
+			(heading) => !markdown.includes(heading)
+		);
+		expect(missingHeadings).toStrictEqual([]);
 		expect(markdown).not.toMatch(/c15t|consent\.io/);
 	});
 });

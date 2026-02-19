@@ -197,6 +197,13 @@ const slugifyHeading = (title: string) =>
 		.trim()
 		.replaceAll(/\s+/g, "-");
 
+const createUniqueSlug = (title: string, seenSlugs: Map<string, number>) => {
+	const baseSlug = slugifyHeading(title);
+	const count = seenSlugs.get(baseSlug) ?? 0;
+	seenSlugs.set(baseSlug, count + 1);
+	return count === 0 ? baseSlug : `${baseSlug}-${count}`;
+};
+
 type TocTitleEntry = [title: string, section: string];
 
 const createTocTitles = (config: ReadieConfig, sections: ReadmeSections) => {
@@ -237,23 +244,23 @@ const createTocBlock = (
 	if (includeTableOfContents === false || titles.length === 0) {
 		return "";
 	}
+	const seenSlugs = new Map<string, number>();
 	const links = titles
-		.map(([title]) => `- [${title}](#${slugifyHeading(title)})`)
+		.map(([title]) => `- [${title}](#${createUniqueSlug(title, seenSlugs)})`)
 		.join("\n");
 	return `## Table of Contents\n\n${links}`;
 };
 
 export const baseReadmeTemplate = (rawConfig: ReadieConfig) => {
-	const config: ReadieConfig = { ...rawConfig };
-	const sections = createReadmeSections(config);
-	const tocTitles = createTocTitles(config, sections);
-	const tocBlock = createTocBlock(config.includeTableOfContents, tocTitles);
+	const sections = createReadmeSections(rawConfig);
+	const tocTitles = createTocTitles(rawConfig, sections);
+	const tocBlock = createTocBlock(rawConfig.includeTableOfContents, tocTitles);
 
 	const readmeContent = [
 		sections.bannerBlock,
 		sections.titleBlock,
 		sections.badgesBlock,
-		config.description,
+		rawConfig.description,
 		tocBlock,
 		sections.featuresBlock,
 		sections.prerequisitesBlock,

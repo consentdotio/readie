@@ -1,4 +1,4 @@
-import { writeFile } from "fs-extra";
+import { remove, writeFile } from "fs-extra";
 import { join } from "pathe";
 import { temporaryDirectory } from "tempy";
 
@@ -8,31 +8,37 @@ const createTempFile = async (contents: string) => {
 	const dir = temporaryDirectory();
 	const filePath = join(dir, "readie.json");
 	await writeFile(filePath, contents, "utf8");
-	return filePath;
+	return { dir, filePath };
 };
 
 describe("load readie config", () => {
 	it("loads a valid config", async () => {
-		const configPath = await createTempFile(
+		const { dir, filePath } = await createTempFile(
 			JSON.stringify({
 				description: "Config validation test.",
 				title: "Test Project",
 			})
 		);
-
-		const config = await loadReadieConfig(configPath);
-		expect(config.title).toBe("Test Project");
+		try {
+			const config = await loadReadieConfig(filePath);
+			expect(config.title).toBe("Test Project");
+		} finally {
+			await remove(dir);
+		}
 	});
 
 	it("throws for invalid config", async () => {
-		const configPath = await createTempFile(
+		const { dir, filePath } = await createTempFile(
 			JSON.stringify({
 				description: "Missing title should fail.",
 			})
 		);
-
-		await expect(loadReadieConfig(configPath)).rejects.toThrow(
-			"Configuration validation failed"
-		);
+		try {
+			await expect(loadReadieConfig(filePath)).rejects.toThrow(
+				"Configuration validation failed"
+			);
+		} finally {
+			await remove(dir);
+		}
 	});
 });

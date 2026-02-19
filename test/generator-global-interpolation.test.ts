@@ -34,19 +34,22 @@ const setupFixture = async () => {
 
 describe("generateReadmeFromConfig with global interpolation", () => {
 	it("injects title and package placeholders in global config", async () => {
-		const { configPath, rootDir } = await setupFixture();
-		const result = await generateReadmeFromConfig({
-			configPath,
-			dryRun: false,
-		});
-		const generated = await readFile(result.outputPath, "utf8");
+		const fixture = await setupFixture();
+		try {
+			const result = await generateReadmeFromConfig({
+				configPath: fixture.configPath,
+				dryRun: false,
+			});
+			const generated = await readFile(result.outputPath, "utf8");
 
-		expect(generated).toContain(
-			'<h1 align="center">@c15t/react: React Consent Components</h1>'
-		);
-		expect(generated).toContain(
-			"Built for @c15t/react: React Consent Components (%40c15t%2Freact)"
-		);
-		await remove(rootDir);
+			expect(generated).toContain(
+				'<h1 align="center">@c15t/react: React Consent Components</h1>'
+			);
+			expect(generated).toContain(
+				"Built for @c15t/react: React Consent Components (%40c15t%2Freact)"
+			);
+		} finally {
+			await remove(fixture.rootDir);
+		}
 	});
 });
