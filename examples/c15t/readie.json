@@ -1,38 +1,38 @@
 {
-  "$schema": "../../schemas/readie.schema.json",
-  "title": "@c15t/react: React Consent Components",
-  "description": "Developer-first CMP for React: cookie banner, consent manager, preferences centre. GDPR ready with minimal setup and rich customization",
-  "includeTableOfContents": false,
-  "features": [
-    "Works with React 19, 18, 17, and 16.8",
-    "Full 'use client' support for React Server Components",
-    "Headless and fully customizable UI components",
-    "Automatic GDPR compliance",
-    "Minimal configuration with TypeScript-first design",
-    "Comprehensive Consent Management Platform (CMP)",
-    "Flexible Cookie Banner and Preference Center components",
-    "Built-in internationalization support",
-    "Seamless consent storage and tracking"
-  ],
-  "prerequisites": [
-    "React 16.8 or later",
-    "Node.js 18.17.0 or later",
-    "A hosted [c15t instance](https://consent.io) (free sign-up) or [self-hosted deployment](https://c15t.com/docs/self-host/v2)"
-  ],
-  "manualInstallation": [
-    "",
-    "```bash\npnpm add @c15t/react\n```",
-    "",
-    "To manually install, follow the guide in our [docs – manual setup](https://c15t.com/docs/frameworks/react/quickstart#manual-setup)."
-  ],
-  "quickStart": "Easiest setup with @c15t/cli:\n\n```bash\n# Generate schema and code\npnpm dlx @c15t/cli generate\n# Alternatives:\n# npx @c15t/cli generate\n# bunx --bun @c15t/cli generate\n```\n\nThe CLI will:\n\n- Install necessary packages\n- Configure your c15t instance\n- Set up environment variables\n- Add consent management components to your app",
-  "usage": [
-    "Import `ConsentManagerProvider` in your app's root component",
-    "Add `CookieBanner` and `PreferenceCenter` components",
-    "Customise styling and behaviour to fit your app",
-    "For full implementation details, see the [React quickstart docs](https://c15t.com/docs/frameworks/react/quickstart)",
+	"$schema": "../../schemas/readie.schema.json",
+	"title": "@c15t/react: React Consent Components",
+	"description": "Developer-first CMP for React: cookie banner, consent manager, preferences centre. GDPR ready with minimal setup and rich customization",
+	"includeTableOfContents": false,
+	"features": [
+		"Works with React 19, 18, 17, and 16.8",
+		"Full 'use client' support for React Server Components",
+		"Headless and fully customizable UI components",
+		"Automatic GDPR compliance",
+		"Minimal configuration with TypeScript-first design",
+		"Comprehensive Consent Management Platform (CMP)",
+		"Flexible Cookie Banner and Preference Center components",
+		"Built-in internationalization support",
+		"Seamless consent storage and tracking"
+	],
+	"prerequisites": [
+		"React 16.8 or later",
+		"Node.js 18.17.0 or later",
+		"A hosted [c15t instance](https://consent.io) (free sign-up) or [self-hosted deployment](https://c15t.com/docs/self-host/v2)"
+	],
+	"manualInstallation": [
+		"",
+		"```bash\npnpm add @c15t/react\n```",
+		"",
+		"To manually install, follow the guide in our [docs – manual setup](https://c15t.com/docs/frameworks/react/quickstart#manual-setup)."
+	],
+	"quickStart": "Easiest setup with @c15t/cli:\n\n```bash\n# Generate schema and code\npnpm dlx @c15t/cli generate\n# Alternatives:\n# npx @c15t/cli generate\n# bunx --bun @c15t/cli generate\n```\n\nThe CLI will:\n\n- Install necessary packages\n- Configure your c15t instance\n- Set up environment variables\n- Add consent management components to your app",
+	"usage": [
+		"Import `ConsentManagerProvider` in your app's root component",
+		"Add `CookieBanner` and `PreferenceCenter` components",
+		"Customise styling and behaviour to fit your app",
+		"For full implementation details, see the [React quickstart docs](https://c15t.com/docs/frameworks/react/quickstart)",
 
-    "```tsx\n// App.tsx\nimport { ConsentManagerProvider, CookieBanner } from '@c15t/react'\n\nfunction App() {\n  return (\n    <ConsentManagerProvider>\n      <YourApp />\n      <CookieBanner />\n    </ConsentManagerProvider>\n  )\n}\n```"
-  ],
-  "docsLink": "https://c15t.com/docs/frameworks/react/quickstart"
+		"```tsx\n// App.tsx\nimport { ConsentManagerProvider, CookieBanner } from '@c15t/react'\n\nfunction App() {\n  return (\n    <ConsentManagerProvider>\n      <YourApp />\n      <CookieBanner />\n    </ConsentManagerProvider>\n  )\n}\n```"
+	],
+	"docsLink": "https://c15t.com/docs/frameworks/react/quickstart"
 }

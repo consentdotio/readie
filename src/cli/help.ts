@@ -1,5 +1,5 @@
 export const printRootHelp = () => {
-  console.log(`readie
+	console.log(`readie
 
 Generate high-quality README files from readie.json.
 

@@ -13,63 +13,63 @@ import { resolveInvocation } from "./cli/resolve-invocation";
 const version = "0.1.0";
 
 const runGenerate = (args: string[]) =>
-  Command.run(generateCommand, {
-    name: "readie",
-    version,
-  })(args).pipe(Effect.provide(NodeContext.layer));
+	Command.run(generateCommand, {
+		name: "readie",
+		version,
+	})(args).pipe(Effect.provide(NodeContext.layer));
 
 const runGenerateWorkspace = (args: string[]) =>
-  Command.run(generateWorkspaceCommand, {
-    name: "readie",
-    version,
-  })(args).pipe(Effect.provide(NodeContext.layer));
+	Command.run(generateWorkspaceCommand, {
+		name: "readie",
+		version,
+	})(args).pipe(Effect.provide(NodeContext.layer));
 
 const runInit = (args: string[]) =>
-  Command.run(initCommand, {
-    name: "readie",
-    version,
-  })(args).pipe(Effect.provide(NodeContext.layer));
+	Command.run(initCommand, {
+		name: "readie",
+		version,
+	})(args).pipe(Effect.provide(NodeContext.layer));
 
 const selectCommandEffect = (
-  resolved: ReturnType<typeof resolveInvocation>
+	resolved: ReturnType<typeof resolveInvocation>
 ) => {
-  if (resolved.mode === "generate") {
-    return runGenerate(resolved.commandArgs);
-  }
-  if (resolved.mode === "generate:workspace") {
-    return runGenerateWorkspace(resolved.commandArgs);
-  }
-  return runInit(resolved.commandArgs);
+	if (resolved.mode === "generate") {
+		return runGenerate(resolved.commandArgs);
+	}
+	if (resolved.mode === "generate:workspace") {
+		return runGenerateWorkspace(resolved.commandArgs);
+	}
+	return runInit(resolved.commandArgs);
 };
 
 const handleError = (error: unknown) => {
-  if (ValidationError.isValidationError(error)) {
-    console.error(String(error));
-    process.exitCode = 1;
-    return;
-  }
+	if (ValidationError.isValidationError(error)) {
+		console.error(String(error));
+		process.exitCode = 1;
+		return;
+	}
 
-  console.error(error instanceof Error ? error.message : String(error));
-  process.exitCode = 1;
+	console.error(error instanceof Error ? error.message : String(error));
+	process.exitCode = 1;
 };
 
 const main = async () => {
-  const resolved = resolveInvocation(process.argv.slice(2));
+	const resolved = resolveInvocation(process.argv.slice(2));
 
-  if (resolved.mode === "help") {
-    printRootHelp();
-    process.exit(0);
-  }
-  if (resolved.mode === "unknown") {
-    printRootHelp();
-    process.exit(1);
-  }
+	if (resolved.mode === "help") {
+		printRootHelp();
+		process.exit(0);
+	}
+	if (resolved.mode === "unknown") {
+		printRootHelp();
+		process.exit(1);
+	}
 
-  try {
-    await Effect.runPromise(selectCommandEffect(resolved));
-  } catch (error) {
-    handleError(error);
-  }
+	try {
+		await Effect.runPromise(selectCommandEffect(resolved));
+	} catch (error) {
+		handleError(error);
+	}
 };
 
 await main();

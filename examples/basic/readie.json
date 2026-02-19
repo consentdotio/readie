@@ -1,21 +1,21 @@
 {
-  "$schema": "https://unpkg.com/readie/schemas/readie.schema.json",
-  "version": "1",
-  "title": "Acme Toolkit",
-  "description": "A TypeScript toolkit for building internal tools.",
-  "includeTableOfContents": true,
-  "badges": [
-    {
-      "label": "npm",
-      "image": "https://img.shields.io/npm/v/acme-toolkit.svg",
-      "link": "https://www.npmjs.com/package/acme-toolkit"
-    }
-  ],
-  "features": ["Typed APIs", "Fast local setup", "Works in Node.js and Bun"],
-  "installation": ["```bash\nnpm install acme-toolkit\n```"],
-  "usage": [
-    "Import the toolkit and initialize your client.",
-    "```ts\nimport { createClient } from 'acme-toolkit'\n\nconst client = createClient()\n```"
-  ],
-  "support": ["Open an issue in your repository tracker."]
+	"$schema": "https://unpkg.com/readie/schemas/readie.schema.json",
+	"version": "1",
+	"title": "Acme Toolkit",
+	"description": "A TypeScript toolkit for building internal tools.",
+	"includeTableOfContents": true,
+	"badges": [
+		{
+			"label": "npm",
+			"image": "https://img.shields.io/npm/v/acme-toolkit.svg",
+			"link": "https://www.npmjs.com/package/acme-toolkit"
+		}
+	],
+	"features": ["Typed APIs", "Fast local setup", "Works in Node.js and Bun"],
+	"installation": ["```bash\nnpm install acme-toolkit\n```"],
+	"usage": [
+		"Import the toolkit and initialize your client.",
+		"```ts\nimport { createClient } from 'acme-toolkit'\n\nconst client = createClient()\n```"
+	],
+	"support": ["Open an issue in your repository tracker."]
 }

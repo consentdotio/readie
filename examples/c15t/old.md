@@ -77,12 +77,12 @@ To manually install, follow the guide in our [docs – manual setup](https://c15
 import { ConsentManagerProvider, CookieBanner } from "@c15t/react";
 
 function App() {
-  return (
-    <ConsentManagerProvider>
-      <YourApp />
-      <CookieBanner />
-    </ConsentManagerProvider>
-  );
+	return (
+		<ConsentManagerProvider>
+			<YourApp />
+			<CookieBanner />
+		</ConsentManagerProvider>
+	);
 }
 ```
 
