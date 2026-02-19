@@ -152,6 +152,21 @@ export const loadGlobalConfig = async (startDir: string): Promise<ReadieGlobalCo
 
 const hasOwn = (obj: object, key: string): boolean => Object.prototype.hasOwnProperty.call(obj, key);
 
+const interpolateTitlePlaceholder = (value: string, title: string): string =>
+  value.replace(/\{\{\s*title\s*\}\}/g, title);
+
+const interpolateTopLevelStrings = (config: ReadieConfig): ReadieConfig => {
+  const interpolated = { ...config } as Record<string, unknown>;
+
+  for (const [key, value] of Object.entries(interpolated)) {
+    if (typeof value === 'string') {
+      interpolated[key] = interpolateTitlePlaceholder(value, config.title);
+    }
+  }
+
+  return interpolated as ReadieConfig;
+};
+
 const resolveMergedValue = <T>(
   key: keyof ReadieConfig,
   projectConfig: ReadieConfig,
@@ -225,5 +240,5 @@ export const mergeConfigs = (
     customSections: mergedCustomSections,
   };
 
-  return merged;
+  return interpolateTopLevelStrings(merged);
 };

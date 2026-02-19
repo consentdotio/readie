@@ -1,6 +1,6 @@
 {
 	"$schema": "../../schemas/readie.schema.json",
-	"banner": "<p align=\"center\">\n  <a href=\"https://c15t.com?utm_source=github&utm_medium=repopage_%40c15t%2Freact\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"../../docs/assets/c15t-banner-readme-dark.svg\" type=\"image/svg+xml\">\n      <img src=\"../../docs/assets/c15t-banner-readme-light.svg\" alt=\"c15t Banner\" type=\"image/svg+xml\">\n    </picture>\n  </a>\n  <br />\n  <h1 align=\"center\">@c15t/react: React Consent Components</h1>\n</p>",
+	"banner": "<p align=\"center\">\n  <a href=\"https://c15t.com?utm_source=github&utm_medium=repopage_%40c15t%2Freact\" target=\"_blank\" rel=\"noopener noreferrer\">\n    <picture>\n      <source media=\"(prefers-color-scheme: dark)\" srcset=\"../../docs/assets/c15t-banner-readme-dark.svg\" type=\"image/svg+xml\">\n      <img src=\"../../docs/assets/c15t-banner-readme-light.svg\" alt=\"c15t Banner\" type=\"image/svg+xml\">\n    </picture>\n  </a>\n  <br />\n  <h1 align=\"center\">{{title}}</h1>\n</p>",
 	"badges": [
 		{
 			"label": "GitHub stars",

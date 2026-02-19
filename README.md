@@ -72,6 +72,14 @@ npx readie --config ./readie.json
 npx readie generate:workspace --root ./packages --package ui --package api --dry-run
 ```
 
+`readie.global.json` supports a `{{title}}` placeholder in top-level string fields (for example `banner`, `footer`, or `quickStart`) that resolves to each project's `readie.json` title during merge:
+
+```json
+{
+  "banner": "<h1 align=\"center\">{{title}}</h1>"
+}
+```
+
 ## Available Commands
 
 - `readie`: Generate a README from the local readie.json (default command).

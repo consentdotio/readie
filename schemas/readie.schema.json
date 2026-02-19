@@ -92,7 +92,7 @@
     },
     "banner": {
       "type": "string",
-      "description": "Raw markdown or HTML rendered before the title."
+      "description": "Raw markdown or HTML rendered before the title. In readie.global.json, top-level string values support `{{title}}` interpolation from the project title."
     },
     "quickStart": {
       "type": "string",
