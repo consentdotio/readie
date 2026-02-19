@@ -1,13 +1,10 @@
 import { ensureDir, remove, writeFile } from "fs-extra";
-import { dirname, join } from "pathe";
+import { join } from "pathe";
 import { temporaryDirectory } from "tempy";
 
 import { loadGlobalConfig, loadReadieConfig } from "#src/config/load-config.js";
 
-const writeJson = async (filePath: string, value: unknown) => {
-	await ensureDir(dirname(filePath));
-	await writeFile(filePath, JSON.stringify(value, null, 2), "utf8");
-};
+import { writeJson } from "./utils.js";
 
 describe("config loading edge cases", () => {
 	it("includes file path when JSON parsing fails", async () => {

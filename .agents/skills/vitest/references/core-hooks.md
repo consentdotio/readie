@@ -79,7 +79,11 @@ beforeAll(async () => {
 }, 30_000); // 30 second timeout
 ```
 
-## Around Hooks
+## Vitest 4.1.0+ Around Hooks
+
+Requires Vitest 4.1.0 or newer. If you're on Vitest 3.x, skip this section.
+
+### aroundEach
 
 Wrap tests with setup/teardown context:
 
@@ -104,7 +108,7 @@ test("insert user", async () => {
 Wrap entire suite:
 
 ```ts
-import { aroundAll, test } from "vitest";
+import { aroundAll } from "vitest";
 
 aroundAll(async (runSuite) => {
 	console.log("before all tests");
@@ -113,7 +117,7 @@ aroundAll(async (runSuite) => {
 });
 ```
 
-### Multiple Around Hooks
+### Multiple aroundEach Hooks
 
 Nested like onion layers:
 

@@ -171,7 +171,7 @@ Run with `vitest --ui` to view coverage visually.
   run: npm run test:coverage
 
 - name: Upload coverage to Codecov
-  uses: codecov/codecov-action@v3
+  uses: codecov/codecov-action@v5
   with:
     files: ./coverage/lcov.info
 ```

@@ -35,12 +35,14 @@ describe("resolve invocation routing", () => {
 		const resolved = resolveInvocation(["init", "--force"]);
 		expect(resolved.mode).toBe("init");
 		expect(resolved.commandArgs).toStrictEqual(["--force"]);
+		expect(resolved.originalArgs).toStrictEqual(["init", "--force"]);
 	});
 
 	it("routes --help to help mode", () => {
 		const resolved = resolveInvocation(["--help"]);
 		expect(resolved.mode).toBe("help");
 		expect(resolved.commandArgs).toStrictEqual([]);
+		expect(resolved.originalArgs).toStrictEqual(["--help"]);
 	});
 
 	it("routes -h to help mode", () => {
@@ -54,6 +56,7 @@ describe("resolve invocation routing", () => {
 		const resolved = resolveInvocation(["help"]);
 		expect(resolved.mode).toBe("help");
 		expect(resolved.commandArgs).toStrictEqual([]);
+		expect(resolved.originalArgs).toStrictEqual(["help"]);
 	});
 
 	it("routes unknown commands to unknown mode", () => {

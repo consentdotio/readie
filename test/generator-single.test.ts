@@ -1,13 +1,10 @@
-import { ensureDir, pathExists, readFile, remove, writeFile } from "fs-extra";
-import { dirname, join, resolve } from "pathe";
+import { pathExists, readFile, remove } from "fs-extra";
+import { join, resolve } from "pathe";
 import { temporaryDirectory } from "tempy";
 
 import { generateReadmeFromConfig } from "#src/readme-generator/generator.js";
 
-const writeJson = async (filePath: string, value: unknown) => {
-	await ensureDir(dirname(filePath));
-	await writeFile(filePath, JSON.stringify(value, null, 2), "utf8");
-};
+import { writeJson } from "./utils.js";
 
 const setupProject = async (configOverrides: Record<string, unknown> = {}) => {
 	const projectDir = temporaryDirectory();
@@ -73,9 +70,18 @@ describe("generator single behavior", () => {
 				configPath: fixture.configPath,
 				dryRun: false,
 			});
+			await writeJson(fixture.configPath, {
+				description: "Generated from tests.",
+				title: "Generator Test Updated",
+			});
+			const thirdResult = await generateReadmeFromConfig({
+				configPath: fixture.configPath,
+				dryRun: false,
+			});
 
 			expect(firstResult.updated).toBeTruthy();
 			expect(secondResult.updated).toBeFalsy();
+			expect(thirdResult.updated).toBeTruthy();
 		});
 	});
 
