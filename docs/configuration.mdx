@@ -1,0 +1,64 @@
+---
+title: Configuration
+description: Reference for readie.json and readie.global.json fields.
+lastModified: 2026-02-19
+---
+
+## Project Config (`readie.json`)
+
+Use `readie.json` to define README content for one project.
+
+### Common Fields
+
+| Field            | Type                      | Purpose                         |
+| ---------------- | ------------------------- | ------------------------------- |
+| `title`          | `string`                  | Main project title              |
+| `description`    | `string`                  | Introductory summary paragraph  |
+| `features`       | `string[]`                | Key feature bullets             |
+| `installation`   | `string[]`                | Installation steps and snippets |
+| `usage`          | `string[]`                | Usage steps and code blocks     |
+| `commands`       | `{ name, description }[]` | Command list in README          |
+| `globalFlags`    | `{ flag, description }[]` | Shared flags section            |
+| `license`        | `string \| { name, url }` | License section                 |
+| `customSections` | `Record<string, string>`  | Additional custom headings      |
+
+### Optional Rendering Controls
+
+- `includeTableOfContents`: enable or disable TOC rendering
+- `output`: write README to a custom path instead of `README.md`
+- `banner`, `footer`: inject custom top/bottom markdown
+
+## Global Config (`readie.global.json`)
+
+Use `readie.global.json` to define defaults shared across nearby projects.
+Readie searches upward from each project directory until it finds one.
+
+### Merge Behavior
+
+- Project config values override global values
+- If project config omits a field, global value can fill it
+- Global config is optional and can be disabled with `--no-global`
+
+## Placeholders
+
+Readie supports placeholder interpolation in top-level string fields:
+
+- `{{title}}`
+- `{{packageName}}`
+- `{{packageNameEncoded}}`
+
+Example:
+
+```json
+{
+	"banner": "<h1>{{title}}</h1>",
+	"footer": "https://example.com/pkg/{{packageNameEncoded}}"
+}
+```
+
+## Schemas
+
+- Project schema: `https://unpkg.com/readie/schemas/readie.schema.json`
+- Global schema: `https://unpkg.com/readie/schemas/readie.global.schema.json`
+
+For editor autocomplete and validation, set `$schema` in your config file.

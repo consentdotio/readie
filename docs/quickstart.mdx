@@ -1,0 +1,56 @@
+---
+title: Quickstart
+description: Install Readie, initialize config, and generate your first README.
+lastModified: 2026-02-19
+---
+
+## Prerequisites
+
+- Node.js 18+
+- npm, pnpm, or yarn
+
+## 1) Initialize a Config
+
+```bash
+npx readie init
+```
+
+This creates a starter `readie.json`.
+
+## 2) Generate a README
+
+```bash
+npx readie
+```
+
+By default, this runs the single-project generate flow using `./readie.json`.
+
+## 3) Preview Without Writing
+
+```bash
+npx readie --dry-run
+```
+
+Use this mode in CI or before committing large docs updates.
+
+## Example `readie.json`
+
+````json
+{
+	"$schema": "https://unpkg.com/readie/schemas/readie.schema.json",
+	"version": "1",
+	"title": "Acme Toolkit",
+	"description": "A TypeScript toolkit for building internal tools.",
+	"includeTableOfContents": true,
+	"installation": ["```bash\nnpm install acme-toolkit\n```"],
+	"usage": [
+		"Import the toolkit and initialize your client.",
+		"```ts\nimport { createClient } from \"acme-toolkit\";\n\nconst client = createClient();\n```"
+	]
+}
+````
+
+## Next Steps
+
+- Learn all available fields in [Configuration](/docs/configuration)
+- Generate docs for many packages with [Workspace Guide](/docs/workspace)

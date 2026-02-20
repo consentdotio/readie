@@ -1,0 +1,10 @@
+{
+	"pages": [
+		"index",
+		"introduction",
+		"quickstart",
+		"configuration",
+		"workspace",
+		"cli-reference"
+	]
+}

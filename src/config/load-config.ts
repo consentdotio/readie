@@ -4,6 +4,9 @@ import { dirname, join, resolve } from "pathe";
 
 import type { ReadieConfig, ReadieGlobalConfig } from "./types";
 
+/**
+ * Runtime schema for command entries declared in config files.
+ */
 const commandSchema = Schema.Struct({
 	description: Schema.NonEmptyString,
 	name: Schema.NonEmptyString,
@@ -97,8 +100,18 @@ const decodeReadieGlobalConfig = Schema.decodeUnknownSync(
 	readieGlobalConfigSchema
 );
 
+/**
+ * File name searched while walking up directories for global defaults.
+ */
 const GLOBAL_CONFIG_NAME = "readie.global.json";
 
+/**
+ * Reads and parses a JSON file.
+ *
+ * @param {string} absolutePath - Absolute path to a JSON file.
+ * @returns {Promise<unknown>} Parsed JSON value.
+ * @throws Error if the file cannot be parsed as valid JSON.
+ */
 const parseJsonFile = async (absolutePath: string): Promise<unknown> => {
 	const raw = await readFile(absolutePath, "utf8");
 	try {
@@ -111,6 +124,13 @@ const parseJsonFile = async (absolutePath: string): Promise<unknown> => {
 	}
 };
 
+/**
+ * Loads and validates a project-level `readie.json` config.
+ *
+ * @param {string} configPath - Path to a project config file.
+ * @returns {Promise<ReadieConfig>} Parsed and validated readie config.
+ * @throws Error if JSON parsing or schema validation fails.
+ */
 export const loadReadieConfig = async (
 	configPath: string
 ): Promise<ReadieConfig> => {
@@ -128,6 +148,13 @@ export const loadReadieConfig = async (
 	}
 };
 
+/**
+ * Loads and validates a global readie config file.
+ *
+ * @param {string} configPath - Path to a global config file.
+ * @returns {Promise<ReadieGlobalConfig>} Parsed and validated global config values.
+ * @throws Error if JSON parsing or schema validation fails.
+ */
 const loadGlobalReadieConfig = async (
 	configPath: string
 ): Promise<ReadieGlobalConfig> => {
@@ -145,6 +172,12 @@ const loadGlobalReadieConfig = async (
 	}
 };
 
+/**
+ * Searches upward from a starting directory for `readie.global.json`.
+ *
+ * @param {string} startDir - Directory where upward discovery begins.
+ * @returns {Promise<ReadieGlobalConfig | null>} The first discovered global config, or `null` when none exists.
+ */
 export const loadGlobalConfig = async (
 	startDir: string
 ): Promise<ReadieGlobalConfig | null> => {
@@ -167,9 +200,13 @@ export const loadGlobalConfig = async (
 const hasOwn = (obj: object, key: string): boolean => Object.hasOwn(obj, key);
 
 interface InterpolationContext {
+	/** Package name resolved from adjacent `package.json` when available. */
 	packageName?: string;
 }
 
+/**
+ * Replaces `{{placeholder}}` tokens using known interpolation values.
+ */
 const interpolatePlaceholders = (
 	value: string,
 	placeholders: Record<string, string>
@@ -179,6 +216,9 @@ const interpolatePlaceholders = (
 		(match, key: string) => placeholders[key] ?? match
 	);
 
+/**
+ * Creates all placeholder values available to config interpolation.
+ */
 const createInterpolationPlaceholders = (
 	config: ReadieConfig,
 	interpolationContext: InterpolationContext
@@ -193,6 +233,9 @@ const createInterpolationPlaceholders = (
 	};
 };
 
+/**
+ * Applies placeholder interpolation to custom section values.
+ */
 const interpolateCustomSections = (
 	customSections: Record<string, string> | undefined,
 	placeholders: Record<string, string>
@@ -208,6 +251,9 @@ const interpolateCustomSections = (
 	return interpolatedSections;
 };
 
+/**
+ * Interpolates top-level string fields and custom section values.
+ */
 const interpolateTopLevelStrings = (
 	config: ReadieConfig,
 	interpolationContext: InterpolationContext
@@ -232,6 +278,11 @@ const interpolateTopLevelStrings = (
 	return interpolated as unknown as ReadieConfig;
 };
 
+/**
+ * Resolves a field with project-over-global precedence.
+ *
+ * Explicit `null` values in either config are treated as "unset".
+ */
 const resolveMergedValue = <T>(
 	key: keyof ReadieConfig,
 	projectConfig: ReadieConfig,
@@ -256,6 +307,9 @@ const readGlobalCustomSections = (global: Record<string, unknown>) => {
 	return global.customSections as Record<string, string>;
 };
 
+/**
+ * Reads custom sections from project config while preserving explicit nulls.
+ */
 const readProjectCustomSections = (project: Record<string, unknown>) => {
 	const projectCustomSections = project.customSections;
 	if (projectCustomSections === null) {
@@ -267,6 +321,9 @@ const readProjectCustomSections = (project: Record<string, unknown>) => {
 	return projectCustomSections as Record<string, string>;
 };
 
+/**
+ * Merges custom sections with project values overriding global duplicates.
+ */
 const resolveMergedCustomSections = (
 	globalConfig: ReadieGlobalConfig | null,
 	projectConfig: ReadieConfig
@@ -294,6 +351,15 @@ const resolveMergedCustomSections = (
 			};
 };
 
+/**
+ * Merges project config with optional global defaults and interpolates
+ * supported placeholders in resulting string fields.
+ *
+ * @param {ReadieGlobalConfig | null} globalConfig - Optional global defaults discovered from parent dirs.
+ * @param {ReadieConfig} projectConfig - Required project-level config.
+ * @param {InterpolationContext} interpolationContext - Optional runtime interpolation context.
+ * @returns {ReadieConfig} A merged config where project values win over global values.
+ */
 export const mergeConfigs = (
 	globalConfig: ReadieGlobalConfig | null,
 	projectConfig: ReadieConfig,

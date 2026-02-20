@@ -1,0 +1,55 @@
+---
+title: Workspace Guide
+description: Generate README files across multiple packages in a monorepo or workspace.
+lastModified: 2026-02-19
+---
+
+## Generate Across Packages
+
+Use `generate:workspace` to scan child directories and process projects that contain a config file.
+
+```bash
+npx readie generate:workspace --root ./packages --config-name readie.json
+```
+
+Disable global config discovery and merge when needed:
+
+```bash
+npx readie generate:workspace --root ./packages --config-name readie.json --no-global
+```
+
+## Filter Specific Packages
+
+Use `--package` to target specific directories by name.
+
+```bash
+npx readie generate:workspace \
+  --root ./packages \
+  --package api \
+  --package ui
+```
+
+`--package` supports repeated flags and comma-separated values.
+
+## Safe Rollouts
+
+Preview updates first:
+
+```bash
+npx readie generate:workspace --root ./packages --dry-run
+```
+
+Fail CI when any package fails:
+
+```bash
+npx readie generate:workspace --root ./packages --strict
+```
+
+## Result Summary
+
+The command reports:
+
+- Updated projects
+- Unchanged projects
+- Failed projects
+- Projects skipped by package filter

@@ -5,11 +5,19 @@ import { resolve } from "pathe";
 
 import { starterConfigText } from "#src/config/starter-config";
 
+/**
+ * Parsed arguments for the `init` command.
+ */
 interface InitCommandArgs {
+	/** Destination path for the generated starter config file. */
 	config: string;
+	/** Overwrites an existing config file when true. */
 	force: boolean;
 }
 
+/**
+ * CLI command that writes a starter `readie.json` file.
+ */
 export const initCommand = Command.make(
 	"init",
 	{
