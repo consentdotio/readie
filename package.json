@@ -1,6 +1,6 @@
 {
 	"name": "readie",
-	"version": "0.0.2",
+	"version": "1.0.0",
 	"description": "Generate high-quality README files from a validated JSON config.",
 	"keywords": [
 		"cli",
